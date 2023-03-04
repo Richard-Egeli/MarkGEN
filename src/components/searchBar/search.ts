@@ -1,4 +1,4 @@
-import Color from '../../config/colorPalette';
+import { Color } from '../../config';
 import DOMElement from '../../types/element';
 
 const searchBar = new DOMElement('div');

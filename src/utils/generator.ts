@@ -1,4 +1,4 @@
-import { CSS, InlineStyle } from '../types/css';
+import { CSS } from '../types/css';
 
 const inlineFunction = (func: (...args: any) => void): string => {
   const code = func.toString();

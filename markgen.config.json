@@ -1,9 +1,0 @@
-{
-    "project": "Example Documentation",
-    "outDir": "build",
-    "srcDir": "example",
-    "extensions": [
-        "c",
-        "h"
-    ]
-}

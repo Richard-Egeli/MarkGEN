@@ -1,2 +1,2 @@
-export type InlineStyle = Partial<ElementCSSInlineStyle['style']>;
-export type CSS = InlineStyle | Record<string, InlineStyle>;
+export type StyleSheet = Partial<ElementCSSInlineStyle['style']>;
+export type CSS = StyleSheet | Record<string, StyleSheet>;

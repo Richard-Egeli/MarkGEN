@@ -1,10 +1,7 @@
-import DOM from '../../dom';
 import { CSS } from '../../types/css';
 import DOMElement from '../../types/element';
 import { generateInlineFunction } from '../../utils/generator';
-import Color from '../../config/colorPalette';
-
-let defaultsAdded = false;
+import { Color } from '../../config';
 
 const defaultStyles: CSS = {
   backgroundColor: 'white',
@@ -37,8 +34,6 @@ class Dropdown extends DOMElement<'button'> {
     );
 
     this.addScript(func);
-
-    // this.addScript(funcGenerator(this.id));
   }
 }
 

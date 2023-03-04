@@ -1,0 +1,32 @@
+{
+    "project": "Example Documentation",
+    "outDir": "build",
+    "srcDir": "example",
+    "extensions": [
+        "c",
+        "h"
+    ],
+    "compilationOptions": {
+        "javascript": "inline",
+        "css": "inline"
+    },
+    "colorPalette": {
+        "light": {
+            "primary": "#FFFFFF",
+            "secondary": "#F8F8F8",
+            "background": "#EEE",
+            "border": "#DDD",
+            "text": "#2a2a2a",
+            "textSecondary": "#EEE",
+            "buttonPrimary": "68A1FF"
+        },
+        "dark": {
+            "primary": "#EEE",
+            "secondary": "#2a2a2a",
+            "background": "#2a2a2a",
+            "border": "#DDD",
+            "text": "#EEE",
+            "textSecondary": "#2a2a2a"
+        }
+    }
+}

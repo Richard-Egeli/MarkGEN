@@ -1,5 +1,4 @@
-import Color from '../../config/colorPalette';
-import config from '../../../markgen.config.json';
+import { Color, Config } from '../../config';
 import DOMElement from '../../types/element';
 import SearchBar from '../../components/searchBar/search';
 import Dropdown from '../../components/dropdown';
@@ -13,7 +12,7 @@ sidebar.id = 'sidebar-id';
 title.id = 'sidebar-title';
 button.id = 'buttonId';
 
-title.textContent = config.project;
+title.textContent = Config.project;
 button.textContent = 'Click me';
 
 sidebar.setStyle({
