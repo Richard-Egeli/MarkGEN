@@ -4,6 +4,8 @@ import DOMElement from '../../types/element';
 import { generateInlineFunction } from '../../utils/generator';
 import Color from '../../config/colorPalette';
 
+let defaultsAdded = false;
+
 const defaultStyles: CSS = {
   backgroundColor: 'white',
   border: 'none',

@@ -1,3 +1,5 @@
+import { CSS, InlineStyle } from '../types/css';
+
 const inlineFunction = (func: (...args: any) => void): string => {
   const code = func.toString();
   return code.substring(code.indexOf('{') + 1, code.lastIndexOf('}')).trim();
@@ -10,4 +12,18 @@ export const generateInlineFunction = (
   return Object.entries(params).reduce<string>((acc, [key, value]) => {
     return acc.replace(key, `"${value}"`);
   }, inlineFunction(func));
+};
+
+export const generateInlineCSS = (styles: CSS): string => {
+  return Object.entries(styles)
+    .map(([key, value]) => {
+      if (typeof value !== 'object') {
+        return `${key}: "${value}";`;
+      } else {
+        return `${key}{${generateInlineCSS(value)}}`;
+      }
+    })
+    .join('')
+    .toString()
+    .replace(/([A-Z])/g, (match) => `-${match.toLowerCase()}`);
 };
