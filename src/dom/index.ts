@@ -11,9 +11,8 @@ class DOM {
     resources: 'usable',
   });
 
-  static window = this.dom.window;
-  static document = this.dom.window.document;
-
+  public static window = this.dom.window;
+  public static document = this.dom.window.document;
   private static elements: DOMElement<any>[] = [];
   private static scripts = this.document.createDocumentFragment();
 

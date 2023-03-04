@@ -1,6 +1,6 @@
 {
-    "project": "Apparatus Documentation",
-    "outDir": "dist",
+    "project": "Example Documentation",
+    "outDir": "build",
     "srcDir": "example",
     "extensions": [
         "c",

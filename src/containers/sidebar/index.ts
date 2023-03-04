@@ -1,10 +1,13 @@
 import Color from '../../config/colorPalette';
 import config from '../../../markgen.config.json';
 import DOMElement from '../../types/element';
+import SearchBar from '../../components/searchBar/search';
+import Dropdown from '../../components/dropdown';
 
 const sidebar = new DOMElement('div');
 const title = new DOMElement('h2');
 const button = new DOMElement('button');
+const dropdown = new Dropdown();
 
 sidebar.id = 'sidebar-id';
 title.id = 'sidebar-title';
@@ -35,7 +38,12 @@ title.setStyle({
   margin: '0',
 });
 
+button.setStyle({
+  width: '100%',
+});
+
 sidebar.appendChild(title);
-sidebar.appendChild(button);
+sidebar.appendChild(SearchBar);
+sidebar.appendChild(dropdown);
 
 export default sidebar;

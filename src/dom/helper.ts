@@ -2,6 +2,11 @@ import fs from 'fs';
 import DOM from '.';
 import DOMElement from '../types/element';
 
+/** Compile DOM elements into a document fragment
+ *
+ * @param elements Array of DOM elements
+ * @returns Document fragment containing compiled elements
+ */
 export const compileElements = (
   elements: DOMElement<any>[]
 ): DocumentFragment => {
@@ -14,6 +19,10 @@ export const compileElements = (
   return fragment;
 };
 
+/** Retrieve script files to inline into the html file
+ *
+ * @param path Array of paths to directories containing scripts
+ */
 export const compileScripts = (path: string[]) => {
   path.forEach((p) => {
     fs.readdirSync(p, { withFileTypes: true }).forEach((dirent) => {

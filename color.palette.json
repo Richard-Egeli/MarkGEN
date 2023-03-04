@@ -5,7 +5,8 @@
         "background": "#EEE",
         "border": "#DDD",
         "text": "#2a2a2a",
-        "textSecondary": "#EEE"
+        "textSecondary": "#EEE",
+        "buttonPrimary": "68A1FF"
     },
     "dark": {
         "primary": "#EEE",

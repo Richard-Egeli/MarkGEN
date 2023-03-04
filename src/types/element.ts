@@ -1,6 +1,10 @@
 import { CSS } from './css';
 import DOM from '../dom';
 
+/**
+ * A DOM element helper class that allows for easy creation of DOM elements
+ * @template T The type of the element
+ */
 class DOMElement<T extends keyof HTMLElementTagNameMap> {
   public parent: DOMElement<any> | null = null;
   public readonly element: HTMLElementTagNameMap[T];
