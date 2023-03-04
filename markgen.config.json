@@ -1,0 +1,9 @@
+{
+    "project": "Apparatus Documentation",
+    "outDir": "dist",
+    "srcDir": "example",
+    "extensions": [
+        "c",
+        "h"
+    ]
+}
