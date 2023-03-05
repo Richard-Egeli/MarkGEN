@@ -1,28 +1,51 @@
-import { Color } from '../../config';
+import { color } from '../../config';
+import DOM from '../../dom';
 import DOMElement from '../../types/element';
 
-const searchBar = new DOMElement('div');
-const input = new DOMElement('input');
-
-searchBar.id = 'search-bar';
-input.id = 'search-input';
-input.element.setAttribute('type', 'text');
-input.element.setAttribute('placeholder', 'Search');
-
-searchBar.setStyle({
-  boxSizing: 'border-box',
-  width: '100%',
-  padding: '8px 8px',
+DOM.addGlobalStyle({
+  '.search-bar-input': {
+    position: 'block',
+    boxSizing: 'border-box',
+    padding: '8px 16px',
+    margin: '8px 0px',
+    width: '90%',
+    borderRadius: '16px',
+    border: `1px solid ${color.border}`,
+  },
 });
 
-input.setStyle({
-  position: 'block',
-  boxSizing: 'border-box',
-  padding: '8px 16px',
-  width: '100%',
-  borderRadius: '16px',
-  border: `1px solid ${Color.border}`,
-});
+class SearchBar extends DOMElement<'input'> {
+  constructor() {
+    super('input');
 
-searchBar.appendChild(input);
-export default searchBar;
+    this.className = 'search-bar-input';
+    this.element.type = 'text';
+    this.element.placeholder = 'Search';
+  }
+
+  get value(): string {
+    return this.element.value;
+  }
+
+  set value(value: string) {
+    this.element.value = value;
+  }
+
+  get type(): string {
+    return this.element.type;
+  }
+
+  set type(type: string) {
+    this.element.type = type;
+  }
+
+  get placeholder(): string {
+    return this.element.placeholder;
+  }
+
+  set placeholder(placeholder: string) {
+    this.element.placeholder = placeholder;
+  }
+}
+
+export default SearchBar;

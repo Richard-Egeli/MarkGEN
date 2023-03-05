@@ -1,12 +1,11 @@
 import { JSDOM } from 'jsdom';
 import fs from 'fs';
 import DOMElement from '../types/element';
-import { compileElements, compileScripts } from './helper';
+import { compileElements, compileScripts, getScriptDirPaths } from './helper';
 import { dirname } from 'path';
-import { getScriptDirPaths } from '../helper';
 import { generateInlineCSS } from '../utils/generator';
-import { CSS } from '../types/css';
-import { CompilationOpts as opts } from '../config';
+import { CSS } from '../types';
+import { compilationOpts as opts } from '../config';
 
 class DOM {
   private static dom = new JSDOM(`<!DOCTYPE html><html><body></body></html>`, {

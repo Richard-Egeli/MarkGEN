@@ -3,7 +3,7 @@
     "outDir": "build",
     "srcDir": "example",
     "extensions": [
-        "c",
+        "md",
         "h"
     ],
     "compilationOptions": {

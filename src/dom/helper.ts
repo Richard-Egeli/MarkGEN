@@ -2,6 +2,21 @@ import fs from 'fs';
 import DOM from '.';
 import DOMElement from '../types/element';
 
+export const getScriptDirPaths = (path: string): string[] => {
+  const dirs: string[] = [];
+  fs.readdirSync(path, { withFileTypes: true }).map((dirent) => {
+    if (dirent.isDirectory()) {
+      if (dirent.name === 'scripts') {
+        dirs.push(`${path}/${dirent.name}`);
+      } else {
+        dirs.push(...getScriptDirPaths(`${path}/${dirent.name}`));
+      }
+    }
+  });
+
+  return dirs;
+};
+
 /** Compile DOM elements into a document fragment
  *
  * @param elements Array of DOM elements

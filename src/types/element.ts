@@ -1,4 +1,4 @@
-import { CSS } from './css';
+import { CSS } from '.';
 import DOM from '../dom';
 import { generateInlineFunction } from '../utils/generator';
 
@@ -34,6 +34,14 @@ class DOMElement<T extends keyof HTMLElementTagNameMap> {
 
   set textContent(text: string | null) {
     this.element.textContent = text;
+  }
+
+  get className(): string {
+    return this.element.className;
+  }
+
+  set className(className: string) {
+    this.element.className = className;
   }
 
   /**

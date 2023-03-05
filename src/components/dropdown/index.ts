@@ -1,27 +1,16 @@
-import { CSS } from '../../types/css';
 import DOMElement from '../../types/element';
-import { Color } from '../../config';
+import { color } from '../../config';
 import DOM from '../../dom';
 
-const defaultStyles: CSS = {
-  backgroundColor: 'white',
-  border: 'none',
-  borderWidth: '0',
-  color: Color.text,
-  padding: '8px 16px',
-  width: '100%',
-  borderBottom: `1px solid ${Color.border}`,
-};
-
 DOM.addGlobalStyle({
-  button: {
+  '.dropdown-button': {
     backgroundColor: 'white',
     border: 'none',
     borderWidth: '0',
-    color: Color.text,
+    color: color.text,
     padding: '8px 16px',
     width: '100%',
-    borderBottom: `1px solid ${Color.border}`,
+    borderBottom: `1px solid ${color.border}`,
   },
 });
 
@@ -29,9 +18,9 @@ class Dropdown extends DOMElement<'button'> {
   constructor() {
     super('button');
 
-    this.id = 'dropdown';
+    this.id = 'dropdown-button';
+    this.className = 'dropdown-button';
     this.textContent = 'Dropdown';
-    // this.setStyle(defaultStyles);
 
     this.addScript(
       (id: string) => {

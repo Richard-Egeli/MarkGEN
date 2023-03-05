@@ -1,20 +1,8 @@
-import { Color, Config } from '../../config';
+import { color, config } from '../../config';
 import DOMElement from '../../types/element';
 import SearchBar from '../../components/searchBar/search';
 import Dropdown from '../../components/dropdown';
 import DOM from '../../dom';
-
-const sidebar = new DOMElement('div');
-const title = new DOMElement('h2');
-const button = new DOMElement('button');
-const dropdown = new Dropdown();
-
-sidebar.id = 'sidebar-id';
-title.id = 'sidebar-title';
-button.id = 'buttonId';
-
-title.textContent = Config.project;
-button.textContent = 'Click me';
 
 DOM.addGlobalStyle({
   '#sidebar-id': {
@@ -25,26 +13,36 @@ DOM.addGlobalStyle({
     margin: '0',
     width: '250px',
     height: '100vh',
-    backgroundColor: Color.primary,
-    borderRight: `1px solid ${Color.border}`,
+    backgroundColor: color.primary,
+    borderRight: `1px solid ${color.border}`,
     textAlign: 'center',
     fontFamily: 'sans-serif',
   },
   '#sidebar-title': {
-    backgroundColor: Color.secondary,
-    borderBottom: `1px solid ${Color.border}`,
-    color: Color.text,
+    backgroundColor: color.secondary,
+    borderBottom: `1px solid ${color.border}`,
+    color: color.text,
     padding: '30px 10px',
     margin: '0',
   },
 });
 
-button.setStyle({
-  width: '100%',
-});
+class Sidebar extends DOMElement<'div'> {
+  constructor() {
+    super('div');
 
-sidebar.appendChild(title);
-sidebar.appendChild(SearchBar);
-sidebar.appendChild(dropdown);
+    const title = new DOMElement('h2');
+    const dropdown = new Dropdown();
+    const searchBar = new SearchBar();
 
-export default sidebar;
+    this.id = 'sidebar-id';
+    title.id = 'sidebar-title';
+    title.textContent = config.project;
+
+    this.appendChild(title);
+    this.appendChild(searchBar);
+    this.appendChild(dropdown);
+  }
+}
+
+export default Sidebar;
