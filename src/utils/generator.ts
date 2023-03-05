@@ -1,26 +1,28 @@
 import { CSS } from '../types/css';
 
-const inlineFunction = (func: (...args: any) => void): string => {
+const convertFunctionToInline = (func: (...args: any) => void): string => {
   const code = func.toString();
   return code.substring(code.indexOf('{') + 1, code.lastIndexOf('}')).trim();
 };
 
 export const generateInlineFunction = (
   func: (...args: any) => void,
-  params: Record<string, any>
+  params: Record<string, any> | null
 ): string => {
-  return Object.entries(params).reduce<string>((acc, [key, value]) => {
-    return acc.replace(key, `"${value}"`);
-  }, inlineFunction(func));
+  return params
+    ? Object.entries(params).reduce<string>((acc, [key, value]) => {
+        return acc.replace(key, `"${value}"`);
+      }, convertFunctionToInline(func))
+    : convertFunctionToInline(func);
 };
 
 export const generateInlineCSS = (styles: CSS): string => {
   return Object.entries(styles)
     .map(([key, value]) => {
       if (typeof value !== 'object') {
-        return `${key}: "${value}";`;
+        return `${key}:${value.toLowerCase()};`;
       } else {
-        return `${key}{${generateInlineCSS(value)}}`;
+        return `${key} {${generateInlineCSS(value)}}`;
       }
     })
     .join('')

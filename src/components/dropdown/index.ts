@@ -1,7 +1,7 @@
 import { CSS } from '../../types/css';
 import DOMElement from '../../types/element';
-import { generateInlineFunction } from '../../utils/generator';
 import { Color } from '../../config';
+import DOM from '../../dom';
 
 const defaultStyles: CSS = {
   backgroundColor: 'white',
@@ -13,15 +13,27 @@ const defaultStyles: CSS = {
   borderBottom: `1px solid ${Color.border}`,
 };
 
+DOM.addGlobalStyle({
+  button: {
+    backgroundColor: 'white',
+    border: 'none',
+    borderWidth: '0',
+    color: Color.text,
+    padding: '8px 16px',
+    width: '100%',
+    borderBottom: `1px solid ${Color.border}`,
+  },
+});
+
 class Dropdown extends DOMElement<'button'> {
   constructor() {
     super('button');
 
     this.id = 'dropdown';
     this.textContent = 'Dropdown';
-    this.setStyle(defaultStyles);
+    // this.setStyle(defaultStyles);
 
-    const func = generateInlineFunction(
+    this.addScript(
       (id: string) => {
         const dropdown = document.getElementById(id);
         if (!dropdown) throw new Error('Dropdown id not found');
@@ -32,8 +44,6 @@ class Dropdown extends DOMElement<'button'> {
       },
       { id: this.id }
     );
-
-    this.addScript(func);
   }
 }
 

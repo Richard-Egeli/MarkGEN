@@ -4,6 +4,9 @@ import DOMElement from '../types/element';
 import { compileElements, compileScripts } from './helper';
 import { dirname } from 'path';
 import { getScriptDirPaths } from '../helper';
+import { generateInlineCSS } from '../utils/generator';
+import { CSS } from '../types/css';
+import { CompilationOpts as opts } from '../config';
 
 class DOM {
   private static dom = new JSDOM(`<!DOCTYPE html><html><body></body></html>`, {
@@ -15,15 +18,14 @@ class DOM {
   public static document = this.dom.window.document;
   private static elements: DOMElement<any>[] = [];
   private static scripts = this.document.createDocumentFragment();
-
-  public static save = (path: string) => {
-    this.document.body.appendChild(this.scripts);
-
-    fs.writeFileSync(path, this.dom.serialize());
-  };
+  private static styles = this.document.createElement('style');
 
   public static addDOMElement = (element: DOMElement<any>): number =>
     this.elements.push(element);
+
+  public static addGlobalStyle = (code: CSS) => {
+    this.styles.innerHTML = this.styles.innerHTML + generateInlineCSS(code);
+  };
 
   public static addGlobalScript = (code: string) => {
     const script = this.document.createElement('script');
@@ -40,6 +42,16 @@ class DOM {
     const root = dirname(require.main?.filename || '');
     const paths = getScriptDirPaths(root);
     compileScripts(paths);
+  };
+
+  public static save = (path: string) => {
+    this.compileElements();
+    this.compileScripts();
+
+    opts.compileCss && this.document.head.appendChild(this.styles);
+    opts.compileScripts && this.document.body.appendChild(this.scripts);
+
+    fs.writeFileSync(path, this.dom.serialize());
   };
 }
 
