@@ -7,7 +7,7 @@ DOM.addGlobalStyle({
     position: 'block',
     boxSizing: 'border-box',
     padding: '8px 16px',
-    margin: '8px 0px',
+    margin: '8px auto',
     width: '90%',
     borderRadius: '16px',
     border: `1px solid ${color.border}`,

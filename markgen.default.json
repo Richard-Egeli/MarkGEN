@@ -1,16 +1,17 @@
 {
     "project": "Example Documentation",
     "outDir": "build",
-    "srcDir": "example",
+    "srcDir": "src",
     "baseDir": "",
     "assetDir": "assets",
     "extensions": [
         "md",
-        "h"
+        "ts"
     ],
     "compilationOptions": {
         "compileScripts": true,
-        "compileCss": true
+        "compileCss": true,
+        "removeEmptyDirs": true
     },
     "colorPalette": {
         "light": {
@@ -20,7 +21,9 @@
             "border": "#DDD",
             "text": "#2a2a2a",
             "textSecondary": "#EEE",
-            "buttonPrimary": "68A1FF"
+            "buttonPrimary": "#FAFAFA",
+            "buttonSecondary": "#EAEAEA",
+            "buttonTertiary": "#CACACA"
         },
         "dark": {
             "primary": "#EEE",

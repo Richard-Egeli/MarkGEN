@@ -8,6 +8,8 @@ import { Directory } from '../../types';
 DOM.addGlobalStyle({
   '#sidebar-id': {
     position: 'absolute',
+    display: 'flex',
+    flexDirection: 'column',
     top: '0',
     left: '0',
     padding: '0',
@@ -43,9 +45,13 @@ class Sidebar extends DOMComponent<'div'> {
     this.appendChild(searchBar);
 
     directory.subDirectories.forEach((dir) => {
-      const dropdown = Dropdown.createDropdownFromDirectory(dir);
+      const dropdown = Dropdown.createDropdownFromDirectory(dir, 1);
       this.appendChild(dropdown);
     });
+
+    Dropdown.createDropdownFiles(directory.files, 0).forEach((file) =>
+      this.appendChild(file)
+    );
   }
 
   public initializeMenu(directory: Directory) {}

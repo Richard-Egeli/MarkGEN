@@ -46,6 +46,7 @@ class DOM {
   };
 
   public static compileAssets = () => {
+    const path = config.baseDir + '/' + config.srcDir;
     compileAssets(config.baseDir + '/' + config.srcDir);
   };
 
