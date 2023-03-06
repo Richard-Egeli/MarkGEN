@@ -8,6 +8,9 @@ export const config = markgenConfig;
 export const color = markgenConfig.colorPalette.light;
 export const compilationOpts = markgenConfig.compilationOptions;
 
+// Assigns a default baseDir
+Object.assign(config, { baseDir: __dirname.split('/').slice(0, -2).join('/') });
+
 // Search for config file in parent directories
 const dirs = __dirname.split(path.sep);
 while (dirs.length > 0) {
@@ -22,7 +25,7 @@ while (dirs.length > 0) {
     Object.assign(color, c.colorPalette.light);
     Object.assign(compilationOpts, c.compilationOptions);
     Object.assign(config, { configPath: file, baseDir: dir });
-
+    Object.assign(config.baseDir, { configPath: file, baseDir: dir });
     break;
   }
 

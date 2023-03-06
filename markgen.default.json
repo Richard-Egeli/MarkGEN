@@ -2,6 +2,8 @@
     "project": "Example Documentation",
     "outDir": "build",
     "srcDir": "example",
+    "baseDir": "",
+    "assetDir": "assets",
     "extensions": [
         "md",
         "h"

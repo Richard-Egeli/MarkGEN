@@ -1,6 +1,7 @@
 import fs from 'fs';
 import DOM from '.';
-import DOMElement from '../types/element';
+import config from '../config';
+import DOMComponent from '../types/dom-component';
 
 export const getScriptDirPaths = (path: string): string[] => {
   const dirs: string[] = [];
@@ -22,10 +23,8 @@ export const getScriptDirPaths = (path: string): string[] => {
  * @param elements Array of DOM elements
  * @returns Document fragment containing compiled elements
  */
-export const compileElements = (
-  elements: DOMElement<any>[]
-): DocumentFragment => {
-  const fragment = DOM.document.createDocumentFragment();
+export const compileElements = (elements: DOMComponent<any>[]): HTMLElement => {
+  const fragment = DOM.document.createElement('div');
 
   elements.forEach((element) => {
     fragment.appendChild(element.compile());
@@ -46,5 +45,26 @@ export const compileScripts = (path: string[]) => {
         DOM.addGlobalScript(code);
       }
     });
+  });
+};
+
+export const compileAssets = (path: string) => {
+  fs.readdirSync(path, { withFileTypes: true }).forEach((dirent) => {
+    if (dirent.isDirectory()) {
+      if (dirent.name === config.assetDir) {
+        fs.readdirSync(`${path}/${dirent.name}`, {
+          withFileTypes: true,
+        }).forEach((file) => {
+          if (file.isFile()) {
+            fs.copyFileSync(
+              `${path}/${dirent.name}/${file.name}`,
+              `${config.baseDir}/${config.outDir}/${config.assetDir}/${file.name}`
+            );
+          }
+        });
+      } else {
+        compileAssets(`${path}/${dirent.name}`);
+      }
+    }
   });
 };

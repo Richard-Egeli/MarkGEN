@@ -11,7 +11,7 @@ export const generateInlineFunction = (
 ): string => {
   return params
     ? Object.entries(params).reduce<string>((acc, [key, value]) => {
-        return acc.replace(key, `"${value}"`);
+        return acc.replace(new RegExp(`${key}`, 'g'), `"${value}"`);
       }, convertFunctionToInline(func))
     : convertFunctionToInline(func);
 };

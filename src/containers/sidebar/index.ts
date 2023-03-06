@@ -1,8 +1,9 @@
 import { color, config } from '../../config';
-import DOMElement from '../../types/element';
+import DOMComponent from '../../types/dom-component';
 import SearchBar from '../../components/searchBar/search';
 import Dropdown from '../../components/dropdown';
 import DOM from '../../dom';
+import { Directory } from '../../types';
 
 DOM.addGlobalStyle({
   '#sidebar-id': {
@@ -27,12 +28,11 @@ DOM.addGlobalStyle({
   },
 });
 
-class Sidebar extends DOMElement<'div'> {
-  constructor() {
+class Sidebar extends DOMComponent<'div'> {
+  constructor(directory: Directory) {
     super('div');
 
-    const title = new DOMElement('h2');
-    const dropdown = new Dropdown();
+    const title = new DOMComponent('h2');
     const searchBar = new SearchBar();
 
     this.id = 'sidebar-id';
@@ -41,8 +41,14 @@ class Sidebar extends DOMElement<'div'> {
 
     this.appendChild(title);
     this.appendChild(searchBar);
-    this.appendChild(dropdown);
+
+    directory.subDirectories.forEach((dir) => {
+      const dropdown = Dropdown.createDropdownFromDirectory(dir);
+      this.appendChild(dropdown);
+    });
   }
+
+  public initializeMenu(directory: Directory) {}
 }
 
 export default Sidebar;

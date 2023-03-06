@@ -1,6 +1,6 @@
 import { color } from '../../config';
 import DOM from '../../dom';
-import DOMElement from '../../types/element';
+import DOMComponent from '../../types/dom-component';
 
 DOM.addGlobalStyle({
   '.search-bar-input': {
@@ -14,13 +14,16 @@ DOM.addGlobalStyle({
   },
 });
 
-class SearchBar extends DOMElement<'input'> {
+class SearchBar extends DOMComponent<'input'> {
   constructor() {
     super('input');
 
     this.className = 'search-bar-input';
+    this.id = 'search-bar-input';
     this.element.type = 'text';
     this.element.placeholder = 'Search';
+
+    this.addExternalScript(__dirname + '/script.js');
   }
 
   get value(): string {

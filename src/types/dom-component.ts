@@ -1,19 +1,24 @@
 import { CSS } from '.';
 import DOM from '../dom';
 import { generateInlineFunction } from '../utils/generator';
+import fs from 'fs';
 
 /**
- * A DOM element helper class that allows for easy creation of DOM elements
+ * A DOM component helper class that allows for easy creation of HTML elements
  * @template T The type of the element
  */
-class DOMElement<T extends keyof HTMLElementTagNameMap> {
-  public parent: DOMElement<any> | null = null;
+class DOMComponent<T extends keyof HTMLElementTagNameMap> {
+  public parent: DOMComponent<any> | null = null;
   public readonly element: HTMLElementTagNameMap[T];
-  public readonly children: DOMElement<any>[] = [];
+  public readonly children: DOMComponent<any>[] = [];
   private readonly scripts: string[] = [];
 
+  makeID(): string {
+    return '-' + Math.random().toString(36).substring(2, 9);
+  }
+
   static create<T extends keyof HTMLElementTagNameMap>(tagName: T) {
-    return new DOMElement<T>(tagName);
+    return new DOMComponent<T>(tagName);
   }
 
   constructor(tagName: T) {
@@ -57,7 +62,24 @@ class DOMElement<T extends keyof HTMLElementTagNameMap> {
     params: Record<string, any> | null = null
   ): void {
     const code = generateInlineFunction(func, params);
+
     this.scripts.push(code);
+  }
+
+  public addExternalScript(path: string): void {
+    const script = fs.readFileSync(path, 'utf8');
+
+    if (script) {
+      this.scripts.push(script);
+    }
+  }
+
+  public addExternalCSS(path: string): void {
+    const css = fs.readFileSync(path, 'utf8');
+
+    if (css) {
+      DOM.addGlobalStyle(css);
+    }
   }
 
   public compile(): HTMLElementTagNameMap[T] {
@@ -68,10 +90,10 @@ class DOMElement<T extends keyof HTMLElementTagNameMap> {
     return this.element;
   }
 
-  public appendChild(child: DOMElement<any>): void {
+  public appendChild(child: DOMComponent<any>): void {
     child.parent = this;
     this.children.push(child);
   }
 }
 
-export default DOMElement;
+export default DOMComponent;
