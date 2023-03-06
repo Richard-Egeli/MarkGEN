@@ -4,6 +4,7 @@ import SearchBar from '../../components/searchBar/search';
 import Dropdown from '../../components/dropdown';
 import DOM from '../../dom';
 import { Directory } from '../../types';
+import DropdownFile from '../../components/dropdown/dropdown-file';
 
 DOM.addGlobalStyle({
   '#sidebar-id': {

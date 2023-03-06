@@ -22,8 +22,8 @@
             "text": "#2a2a2a",
             "textSecondary": "#EEE",
             "buttonPrimary": "#FAFAFA",
-            "buttonSecondary": "#EAEAEA",
-            "buttonTertiary": "#CACACA"
+            "buttonSecondary": "#F2F2F2",
+            "buttonTertiary": "#DADADA"
         },
         "dark": {
             "primary": "#EEE",
