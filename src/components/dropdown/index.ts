@@ -9,6 +9,19 @@ import DropdownFolder from './dropdown-folder';
 
 const menuFunctionality = (buttonId, chevronId, containerId) => {
   const button = document.getElementById(buttonId);
+  const isOpen = sessionStorage.getItem(buttonId) === 'true';
+
+  // keep open on refresh
+  if (isOpen) {
+    const chevron = document.getElementById(chevronId);
+    const container = document.getElementById(containerId);
+
+    if (chevron && container) {
+      chevron.style.transform = 'rotate(90deg)';
+      container.style.display = 'block';
+    }
+  }
+
   if (button) {
     button.addEventListener('click', () => {
       const chevron = document.getElementById(chevronId);
@@ -16,11 +29,13 @@ const menuFunctionality = (buttonId, chevronId, containerId) => {
 
       if (chevron && container) {
         if (chevron.style.transform === 'rotate(90deg)') {
+          sessionStorage.setItem(buttonId, 'false');
           chevron.style.transform = 'rotate(0deg)';
           container.style.display = 'none';
           return;
         }
 
+        sessionStorage.setItem(buttonId, 'true');
         chevron.style.transform = 'rotate(90deg)';
         container.style.display = 'block';
       }

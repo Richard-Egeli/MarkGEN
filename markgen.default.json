@@ -4,6 +4,7 @@
     "srcDir": "src",
     "baseDir": "",
     "assetDir": "assets",
+    "codeTheme": "atom-one-dark",
     "extensions": [
         "md",
         "ts"
@@ -15,15 +16,15 @@
     },
     "colorPalette": {
         "light": {
-            "primary": "#FFFFFF",
-            "secondary": "#F8F8F8",
+            "primary": "#EAEEED",
+            "secondary": "#2980b9",
             "background": "#EEE",
             "border": "#DDD",
-            "text": "#2a2a2a",
+            "text": "#4C4957",
+            "title": "#fff",
             "textSecondary": "#EEE",
-            "buttonPrimary": "#FAFAFA",
-            "buttonSecondary": "#F2F2F2",
-            "buttonTertiary": "#DADADA"
+            "buttonPrimary": "#EAEEED",
+            "buttonSecondary": "#DADADA"
         },
         "dark": {
             "primary": "#EEE",

@@ -11,6 +11,8 @@ export const getDirectoriesNew = (
         dir.subDirectories.push(
           getDirectoriesNew(`${path}/${dirent.name}`, extensions)
         );
+      } else if (dirent.name.split('.').pop() === 'md') {
+        dir.page = dirent.name;
       } else {
         if (extensions.includes(dirent.name.split('.').pop() as string)) {
           dir.files.push(dirent.name);

@@ -6,6 +6,7 @@ export type CSS = StyleSheet | Record<string, StyleSheet>;
 export interface Directory {
   name: string;
   path: string;
+  page: string;
   subDirectories: Directory[];
   files: string[];
 }

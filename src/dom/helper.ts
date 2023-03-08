@@ -23,8 +23,10 @@ export const getScriptDirPaths = (path: string): string[] => {
  * @param elements Array of DOM elements
  * @returns Document fragment containing compiled elements
  */
-export const compileElements = (elements: DOMComponent<any>[]): HTMLElement => {
-  const fragment = DOM.document.createElement('div');
+export const compileElements = (
+  elements: DOMComponent<any>[]
+): DocumentFragment => {
+  const fragment = DOM.document.createDocumentFragment();
 
   elements.forEach((element) => {
     fragment.appendChild(element.compile());

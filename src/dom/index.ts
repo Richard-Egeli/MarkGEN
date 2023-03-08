@@ -16,6 +16,7 @@ class DOM {
   private static dom = new JSDOM(`<!DOCTYPE html><html><body></body></html>`, {
     runScripts: 'dangerously',
     resources: 'usable',
+    url: 'http://localhost',
   });
 
   public static window = this.dom.window;
@@ -36,6 +37,14 @@ class DOM {
         this.styles.innerHTML += generateInlineCSS(code);
         break;
     }
+  };
+
+  public static setSessionParam = (name: string, value: any) => {
+    DOM?.window?.sessionStorage?.setItem(name, value);
+  };
+
+  public static getSessionParam = (name: string): any => {
+    return DOM?.window?.sessionStorage?.getItem(name);
   };
 
   public static addGlobalScript = (code: string) => {

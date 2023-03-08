@@ -6,11 +6,15 @@ DOM.addGlobalStyle({
   '.search-bar-input': {
     position: 'block',
     boxSizing: 'border-box',
-    padding: '8px 16px',
-    margin: '8px auto',
+    padding: '6px 16px',
+    margin: '0px auto 8px auto',
     width: '90%',
     borderRadius: '16px',
     border: `1px solid ${color.border}`,
+  },
+
+  '.search-bar-input:focus': {
+    outline: 'none',
   },
 });
 

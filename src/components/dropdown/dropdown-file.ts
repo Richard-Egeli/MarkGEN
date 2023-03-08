@@ -8,15 +8,14 @@ DOM.addGlobalStyle({
     alignItems: 'center',
     color: color.text,
     width: '100%',
-    height: '32px',
+    minHeight: '32px',
     border: 'none',
-    borderBottom: `1px solid ${color.border}`,
-    backgroundColor: color.buttonSecondary,
-    marginBottom: '8px',
+    // borderBottom: `1px solid ${color.border}`,
+    backgroundColor: color.buttonPrimary,
   },
 
   '.dropdown-file-button:hover': {
-    backgroundColor: color.buttonTertiary,
+    backgroundColor: color.buttonSecondary,
   },
 
   '.dropdown-file-text': {
@@ -42,7 +41,7 @@ class DropdownFile extends DOMComponent<'button'> {
     this.appendChild(text);
 
     this.setStyle({
-      paddingLeft: `${depth * 10 + 16}px`,
+      paddingLeft: `${depth * 10 + 10}px`,
     });
   }
 }

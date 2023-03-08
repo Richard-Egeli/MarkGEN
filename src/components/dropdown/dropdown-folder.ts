@@ -6,12 +6,10 @@ DOM.addGlobalStyle({
   '.dropdown-folder-container': {
     display: 'flex',
     alignItems: 'center',
-    borderBottom: `1px solid ${color.border}`,
-    marginBottom: '8px',
+    marginTop: '8px',
   },
 
   '.dropdown-folder-container-button': {
-    backgroundImage: `linear-gradient(${color.buttonPrimary}, ${color.buttonTertiary})`,
     display: 'flex',
     alignItems: 'center',
     color: color.text,
@@ -20,10 +18,13 @@ DOM.addGlobalStyle({
     border: 'none',
     textAlign: 'left',
     padding: '8px',
+    fontWeight: 'bold',
+    fontSize: '12px',
+    backgroundColor: color.buttonPrimary,
   },
 
   '.dropdown-folder-container-button:hover': {
-    backgroundImage: `linear-gradient(${color.buttonTertiary}, ${color.buttonTertiary})`,
+    backgroundColor: color.buttonSecondary,
   },
 
   '.dropdown-folder-container-icon-chevron': {
@@ -33,16 +34,19 @@ DOM.addGlobalStyle({
   },
 
   '.dropdown-folder-container-icon-button': {
-    backgroundImage: `linear-gradient(${color.buttonPrimary}, ${color.buttonTertiary})`,
+    borderRight: `1px solid ${color.border}`,
     display: 'flex',
     alignItems: 'center',
     color: color.text,
     padding: '8px',
-    border: 'none',
+    borderTop: 'none',
+    borderLeft: 'none',
+    borderBottom: 'none',
+    backgroundColor: color.buttonPrimary,
   },
 
   '.dropdown-folder-container-icon-button:hover': {
-    backgroundImage: `linear-gradient(${color.buttonTertiary}, ${color.buttonTertiary})`,
+    backgroundColor: color.buttonSecondary,
   },
 });
 
@@ -67,7 +71,7 @@ class DropdownFolder extends DOMComponent<'div'> {
     this.iconButton.element.style.paddingLeft = `${depth * 10}px`;
 
     this.button.className = this.className + '-button';
-    this.button.id = this.makeID();
+    this.button.id = this.id + '-button';
 
     this.icon.className = this.className + '-icon-chevron';
     this.icon.id = this.id + '-icon-chevron';
