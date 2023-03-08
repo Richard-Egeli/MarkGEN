@@ -10,7 +10,7 @@ DOM.addGlobalStyle({
     width: '100%',
     minHeight: '32px',
     border: 'none',
-    // borderBottom: `1px solid ${color.border}`,
+    textDecoration: 'none',
     backgroundColor: color.buttonPrimary,
   },
 
@@ -23,11 +23,12 @@ DOM.addGlobalStyle({
   },
 });
 
-class DropdownFile extends DOMComponent<'button'> {
+class DropdownFile extends DOMComponent<'a'> {
   constructor(fileName: string, depth: number) {
-    super('button');
+    super('a');
 
     this.className = 'dropdown-file-button';
+    this.element.href = './test.html';
 
     const icon = new DOMComponent('img');
     icon.className = 'dropdown-file-icon';

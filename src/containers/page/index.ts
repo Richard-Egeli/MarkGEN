@@ -6,6 +6,7 @@ import hljs from 'highlight.js';
 import config from '../../config';
 import path = require('path');
 import { Directory } from '../../types';
+import Sidebar from '../sidebar';
 
 DOM.addGlobalStyle({
   '.page': {
@@ -33,12 +34,14 @@ const codeStylePath = path.join(
 
 class Page extends DOMComponent<'div'> {
   directory: Directory;
+
   constructor(directory: Directory) {
     super('div');
     this.className = 'page';
     this.directory = directory;
 
-    const value = fs.readFileSync(directory.page, 'utf8');
+    const pagePath = path.join(config.baseDir, directory.path, directory.page);
+    const value = fs.readFileSync(pagePath, 'utf8');
     const md = marked(value);
 
     this.element.innerHTML = md;

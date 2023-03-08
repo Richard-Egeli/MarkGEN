@@ -14,7 +14,7 @@ DOM.addGlobalStyle({
 
 const directory = getDirectoriesNew(config.srcDir, config.extensions);
 const sidebar = new Sidebar(directory);
-const page = new Page(__dirname + '/' + directory.page);
+const page = new Page(directory);
 
 DOM.addDOMElement(sidebar);
 DOM.addDOMElement(page);

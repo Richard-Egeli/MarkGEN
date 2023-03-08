@@ -20,7 +20,6 @@ DOM.addGlobalStyle({
     backgroundColor: color.primary,
     textAlign: 'center',
     fontFamily: 'sans-serif',
-    paddingBottom: '20px',
   },
 
   '.sidebar-head': {
@@ -36,6 +35,25 @@ DOM.addGlobalStyle({
     overflowX: 'hidden',
     padding: '0',
     borderRight: `1px solid ${color.border}`,
+    paddingBottom: '20px',
+  },
+
+  '.sidebar-footer': {
+    position: 'relative',
+    bottom: '0',
+    width: '100%',
+    textAlign: 'center',
+    backgroundColor: color.primary,
+    borderTop: `1px solid ${color.border}`,
+  },
+
+  '.sidebar-footer p': {
+    // borderBottom: `1px solid ${color.border}`,
+  },
+
+  '.sidebar-footer a': {
+    color: color.secondary,
+    fontWeight: 'bold',
   },
 
   '#sidebar-title': {
@@ -45,6 +63,22 @@ DOM.addGlobalStyle({
   },
 });
 
+const generateFooter = (): DOMComponent<'div'> => {
+  const footer = new DOMComponent('div');
+  footer.className = 'sidebar-footer';
+
+  const poweredBy = new DOMComponent('p');
+  poweredBy.textContent = 'Built with ';
+
+  const title = new DOMComponent('a');
+  title.textContent = 'MarkGEN';
+  title.element.href = '';
+
+  poweredBy.appendChild(title);
+  footer.appendChild(poweredBy);
+  return footer;
+};
+
 class Sidebar extends DOMComponent<'div'> {
   constructor(directory: Directory) {
     super('div');
@@ -53,6 +87,7 @@ class Sidebar extends DOMComponent<'div'> {
     const searchBar = new SearchBar();
     const sidebarHead = new DOMComponent('div');
     const sidebarBody = new DOMComponent('div');
+    const sidebarFooter = generateFooter();
 
     sidebarHead.className = 'sidebar-head';
     sidebarBody.className = 'sidebar-body';
@@ -66,6 +101,7 @@ class Sidebar extends DOMComponent<'div'> {
 
     this.appendChild(sidebarHead);
     this.appendChild(sidebarBody);
+    this.appendChild(sidebarFooter);
 
     directory.subDirectories.forEach((dir, index) => {
       const dropdown = Dropdown.createDropdownFromDirectory(dir, 1);
