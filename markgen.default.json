@@ -1,13 +1,14 @@
 {
     "project": "Example Documentation",
     "outDir": "docs",
-    "srcDir": "src",
+    "srcDir": "example",
     "baseDir": "",
     "assetDir": "assets",
     "codeTheme": "atom-one-dark",
     "extensions": [
         "md",
-        "ts"
+        "ts",
+        "h"
     ],
     "compilationOptions": {
         "compileScripts": true,

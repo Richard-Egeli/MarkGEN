@@ -1,5 +1,5 @@
-import DOMComponent from '../../types/dom-component';
-import DOM from '../../dom';
+import DOMComponent from '../../dom/dom-component';
+import { DOMFactory } from '../../dom';
 
 import fs from 'fs';
 import path from 'path';
@@ -55,7 +55,6 @@ class Page {
   title: string;
   sidebar: Sidebar;
   content: DOMComponent<'div'>;
-  children: DOMComponent<any>[] = [];
   dom = new JSDOM(`<!DOCTYPE html><html><body></body></html>`, {
     runScripts: 'dangerously',
     resources: 'usable',
@@ -67,8 +66,8 @@ class Page {
   body = this.document.body;
   head = this.document.head;
 
-  globalScripts = DOM.createDocumentFragment();
-  globalStyles = DOM.createElement('style');
+  globalScripts = DOMFactory.createDocumentFragment();
+  globalStyles = DOMFactory.createElement('style');
 
   constructor(info: PageInfo, sidebar: Sidebar) {
     this.path = info.path;
@@ -106,7 +105,7 @@ class Page {
   };
 
   public addGlobalScript = (code: string) => {
-    const script = DOM.createElement('script');
+    const script = DOMFactory.createElement('script');
 
     script.innerHTML = `{${code}}`;
     this.globalScripts.appendChild(script);
@@ -115,7 +114,6 @@ class Page {
   public appendChild = (child: DOMComponent<any>) => {
     recursivelySetPage(this, child);
     this.body.appendChild(child.compile());
-    this.children.push(child);
   };
 
   public setSessionParam = (name: string, value: any) => {

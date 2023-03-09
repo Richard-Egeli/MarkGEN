@@ -1,27 +1,6 @@
-import DOMComponent from '../../types/dom-component';
+import DOMComponent from '../../dom/dom-component';
 import { color } from '../../config';
 import { CSS } from '../../types';
-
-// DOM.addGlobalStyle({
-//   '.dropdown-file-button': {
-//     display: 'flex',
-//     alignItems: 'center',
-//     color: color.text,
-//     width: '100%',
-//     minHeight: '32px',
-//     border: 'none',
-//     textDecoration: 'none',
-//     backgroundColor: color.buttonPrimary,
-//   },
-
-//   '.dropdown-file-button:hover': {
-//     backgroundColor: color.buttonSecondary,
-//   },
-
-//   '.dropdown-file-text': {
-//     paddingLeft: '8px',
-//   },
-// });
 
 const globalStyles: CSS = {
   '.dropdown-nav': {

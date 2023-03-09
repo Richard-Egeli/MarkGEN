@@ -2,7 +2,7 @@ export * from './dropdown-nav';
 export * from './dropdown-links';
 
 import { PageInfo } from '../../types';
-import DOMComponent from '../../types/dom-component';
+import DOMComponent from '../../dom/dom-component';
 import DropdownLink from './dropdown-links';
 
 const menuIconFunc = (buttonId, chevronId, containerId) => {

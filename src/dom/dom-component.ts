@@ -1,14 +1,18 @@
-import { CSS } from '.';
+import { CSS } from '../types';
 import { generateInlineFunction } from '../utils/generator';
 import fs from 'fs';
 import Page from '../containers/page';
-import DOM from '../dom';
+import { DOMFactory } from '.';
+import {
+  ComponentConstructorType,
+  ComponentType,
+} from '../types/dom-component-types';
 
 /**
  * A DOM component helper class that allows for easy creation of HTML elements
  * @template T The type of the element
  */
-class DOMComponent<T extends keyof HTMLElementTagNameMap> {
+export class DOMComponent<T extends keyof HTMLElementTagNameMap> {
   public page: Page | null = null;
   public parent: DOMComponent<any> | null = null;
   public readonly element: HTMLElementTagNameMap[T];
@@ -28,7 +32,7 @@ class DOMComponent<T extends keyof HTMLElementTagNameMap> {
   }
 
   constructor(tagName: T) {
-    this.element = DOM.createElement(tagName);
+    this.element = DOMFactory.createElement(tagName);
   }
 
   get id(): string {
@@ -112,6 +116,26 @@ class DOMComponent<T extends keyof HTMLElementTagNameMap> {
     child.parent = this;
     child.page = this.page;
     this.childrenAppend.push(child);
+  }
+
+  /**
+   *
+   * @param type Type of component that extends DOMComponent,
+   * this function creates a new component, appends it to the parent and returns it
+   * @param args Optional arguments to pass to the component
+   * @returns The newly created component
+   */
+  public addComponent<T extends ComponentType>(
+    type: ComponentConstructorType,
+    ...args: any[]
+  ): T {
+    const component =
+      typeof type === 'string'
+        ? new DOMComponent(type as any)
+        : new type(...args);
+
+    this.appendChild(component as any);
+    return component as any;
   }
 }
 

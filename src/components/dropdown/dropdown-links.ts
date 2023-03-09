@@ -1,4 +1,4 @@
-import DOMComponent from '../../types/dom-component';
+import DOMComponent from '../../dom/dom-component';
 import { color } from '../../config';
 import { CSS } from '../../types';
 

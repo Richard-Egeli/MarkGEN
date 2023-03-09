@@ -1,5 +1,5 @@
 import { color } from '../../config';
-import DOMComponent from '../../types/dom-component';
+import DOMComponent from '../../dom/dom-component';
 
 const globalStyles = {
   '.search-bar-input': {
