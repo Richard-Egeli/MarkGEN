@@ -6,22 +6,22 @@ The tool is still very much a work in progress, so it's not ready to be used qui
 
 ## Upcoming features
 
-* Parsing of multiple programming languages
-  
-  * C/C++
-  
-  * Javascript / Typescript
-  
-  * Markdown
-  
-  * C#
+- Parsing of multiple programming languages
 
-* Functional Search Engine
+  - C/C++
 
-* Theme customizability
+  - Javascript / Typescript
 
-* Made into a simple to install node module
+  - Markdown
 
-* And more
+  - C#
 
-# 
+- Functional Search Engine
+
+- Theme customizability
+
+- Made into a simple to install node module
+
+- And more
+
+#
