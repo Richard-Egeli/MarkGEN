@@ -41,7 +41,7 @@ const myFunc = (id, value) => {
 
 Here we run into an issue where we want to insert a few parameters, but we don't have access to the parameters in the parenthesis.
 
-So I solved this issue by issuing a replace command on the string, so you've got to insert a object in the **`addScript`** function as follows:
+So I solved this issue by issuing a replace command on the string, so you've got to insert a object with `{ (key = var name), (value = var value) }` in the `addScript` function as follows:
 
 ```javascript
 element.addScript(myFunc, {

@@ -7,10 +7,11 @@ import {
   compileScripts,
   getScriptDirPaths,
 } from './helper';
-import { dirname } from 'path';
+import path, { dirname } from 'path';
 import { generateInlineCSS } from '../utils/generator';
 import { CSS } from '../types';
 import config, { compilationOpts as opts } from '../config';
+import Page from '../containers/page';
 
 class DOM {
   private static dom = new JSDOM(`<!DOCTYPE html><html><body></body></html>`, {
@@ -69,15 +70,39 @@ class DOM {
     compileScripts(paths);
   };
 
-  public static save = (path: string) => {
+  // public static savePage = (page: Page) => {
+  //   DOM.addDOMElement(page);
+  //   console.log('Saving page: ' + page.title);
+
+  //   this.compileElements();
+  //   this.compileScripts();
+
+  //   opts.compileCss && this.document.head.appendChild(this.styles);
+  //   opts.compileScripts && this.document.body.appendChild(this.scripts);
+
+  //   fs.writeFileSync(
+  //     path.join(config.outDir + '/' + page.title + '.html'),
+  //     this.dom.serialize()
+  //   );
+
+  //   this.elements = [];
+  //   this.scripts = this.document.createDocumentFragment();
+  //   this.styles = this.document.createElement('style');
+  //   this.dom = new JSDOM(`<!DOCTYPE html><html><body></body></html>`, {
+  //     runScripts: 'dangerously',
+  //     resources: 'usable',
+  //     url: 'http://localhost',
+  //   });
+  // };
+
+  public static save = (buildFolder: string) => {
     this.compileElements();
     this.compileScripts();
-    this.compileAssets();
 
     opts.compileCss && this.document.head.appendChild(this.styles);
     opts.compileScripts && this.document.body.appendChild(this.scripts);
 
-    fs.writeFileSync(path, this.dom.serialize());
+    fs.writeFileSync(buildFolder, this.dom.serialize());
   };
 }
 

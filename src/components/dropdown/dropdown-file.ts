@@ -41,7 +41,7 @@ class DropdownFile extends DOMComponent<'a'> {
     text.element.textContent = fileName;
     this.appendChild(text);
 
-    this.setStyle({
+    this.setInlineStyle({
       paddingLeft: `${depth * 10 + 10}px`,
     });
   }

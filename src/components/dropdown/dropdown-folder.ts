@@ -1,8 +1,8 @@
-import DOM from '../../dom';
 import DOMComponent from '../../types/dom-component';
 import { color } from '../../config';
+import { CSS } from '../../types';
 
-DOM.addGlobalStyle({
+const globalStyles: CSS = {
   '.dropdown-folder-container': {
     display: 'flex',
     alignItems: 'center',
@@ -14,13 +14,15 @@ DOM.addGlobalStyle({
     alignItems: 'center',
     color: color.text,
     width: '100%',
-    height: '32px',
+    height: '36px',
     border: 'none',
     textAlign: 'left',
-    padding: '8px',
+    padding: '0px 8px',
     fontWeight: 'bold',
     fontSize: '12px',
+    textDecoration: 'none',
     backgroundColor: color.buttonPrimary,
+    cursor: 'pointer',
   },
 
   '.dropdown-folder-container-button:hover': {
@@ -37,22 +39,26 @@ DOM.addGlobalStyle({
     borderRight: `1px solid ${color.border}`,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     color: color.text,
+    height: '36px',
+    minWidth: '36px',
     padding: '8px',
     borderTop: 'none',
     borderLeft: 'none',
     borderBottom: 'none',
     backgroundColor: color.buttonPrimary,
+    cursor: 'pointer',
   },
 
   '.dropdown-folder-container-icon-button:hover': {
     backgroundColor: color.buttonSecondary,
   },
-});
+};
 
 class DropdownFolder extends DOMComponent<'div'> {
   public iconButton: DOMComponent<'button'>;
-  public button: DOMComponent<'button'>;
+  public button: DOMComponent<'a'>;
   public icon: DOMComponent<'img'>;
   public text: DOMComponent<'span'>;
 
@@ -60,15 +66,17 @@ class DropdownFolder extends DOMComponent<'div'> {
     super('div');
 
     this.className = 'dropdown-folder-container';
-    this.id = path + this.makeID();
+    this.id = path;
+    this.addGlobalStyles(globalStyles);
 
     this.icon = new DOMComponent('img');
     this.text = new DOMComponent('span');
-    this.button = new DOMComponent('button');
+    this.button = new DOMComponent('a');
     this.iconButton = new DOMComponent('button');
+    this.iconButton.id = 'test-button';
 
     this.iconButton.className = this.className + '-icon-button';
-    this.iconButton.element.style.paddingLeft = `${depth * 10}px`;
+    this.iconButton.element.style.paddingLeft = `${depth * 10 + 8}px`;
 
     this.button.className = this.className + '-button';
     this.button.id = this.id + '-button';

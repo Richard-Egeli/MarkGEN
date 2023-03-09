@@ -2,7 +2,7 @@ import { color } from '../../config';
 import DOM from '../../dom';
 import DOMComponent from '../../types/dom-component';
 
-DOM.addGlobalStyle({
+const globalStyles = {
   '.search-bar-input': {
     position: 'block',
     boxSizing: 'border-box',
@@ -16,7 +16,7 @@ DOM.addGlobalStyle({
   '.search-bar-input:focus': {
     outline: 'none',
   },
-});
+};
 
 class SearchBar extends DOMComponent<'input'> {
   constructor() {
@@ -27,6 +27,7 @@ class SearchBar extends DOMComponent<'input'> {
     this.element.type = 'text';
     this.element.placeholder = 'Search';
 
+    this.addGlobalStyles(globalStyles);
     this.addExternalScript(__dirname + '/script.js');
   }
 

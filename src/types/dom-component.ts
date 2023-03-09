@@ -2,16 +2,21 @@ import { CSS } from '.';
 import DOM from '../dom';
 import { generateInlineFunction } from '../utils/generator';
 import fs from 'fs';
+import Page from '../containers/page';
 
 /**
  * A DOM component helper class that allows for easy creation of HTML elements
  * @template T The type of the element
  */
 class DOMComponent<T extends keyof HTMLElementTagNameMap> {
+  public page: Page | null = null;
   public parent: DOMComponent<any> | null = null;
   public readonly element: HTMLElementTagNameMap[T];
-  public readonly children: DOMComponent<any>[] = [];
-  private readonly scripts: string[] = [];
+  public children: DOMComponent<any>[] = [];
+  private inlineStyles: string[] = [];
+  private globalStyles: CSS = {};
+
+  private scripts: string[] = [];
 
   makeID(): string {
     return '-' + Math.random().toString(36).substring(2, 9);
@@ -53,11 +58,15 @@ class DOMComponent<T extends keyof HTMLElementTagNameMap> {
    * Set inline styles on the element
    * @param styles The CSS styles to apply to the element
    */
-  public setStyle(styles: CSS): void {
+  public setInlineStyle(styles: CSS): void {
     Object.assign(this.element.style, styles);
   }
 
-  public addScript(
+  public addGlobalStyles(styles: CSS): void {
+    Object.assign(this.globalStyles, styles);
+  }
+
+  public addInlineScript(
     func: (...args: any) => void,
     params: Record<string, any> | null = null
   ): void {
@@ -84,9 +93,9 @@ class DOMComponent<T extends keyof HTMLElementTagNameMap> {
 
   public compile(): HTMLElementTagNameMap[T] {
     this.parent && this.parent.element.appendChild(this.element);
-    this.scripts.forEach(DOM.addGlobalScript);
+    this.scripts.forEach(this.page.addGlobalScript);
+    this.page.addGlobalStyles(this.globalStyles);
     this.children.forEach((c) => c.compile());
-
     return this.element;
   }
 

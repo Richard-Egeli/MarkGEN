@@ -1,19 +1,23 @@
-import DOM from '../../dom';
 import DOMComponent from '../../types/dom-component';
 import { marked } from 'marked';
-import fs from 'fs';
 import hljs from 'highlight.js';
 import config from '../../config';
 import path = require('path');
-import { Directory } from '../../types';
-import Sidebar from '../sidebar';
+import { PageInfo, CSS } from '../../types';
+import { generateInlineCSS } from '../../utils/generator';
+import { JSDOM } from 'jsdom';
+import fs from 'fs';
+import { recursivelySetPage } from './helper';
 
-DOM.addGlobalStyle({
+const globalStyles: CSS = {
+  '*': {
+    boxSizing: 'border-box',
+  },
+
   '.page': {
     position: 'absolute',
     top: '0',
-    left: '300px',
-    width: 'calc(100% - 300px)',
+    width: '100%',
     height: '100%',
     margin: '0',
     fontFamily: 'sans-serif',
@@ -25,30 +29,120 @@ DOM.addGlobalStyle({
     whiteSpace: 'pre',
     overflowX: 'auto',
   },
-});
+
+  '.markdown-body': {
+    position: 'absolute',
+    right: '0',
+    top: '0',
+    fontFamily: 'sans-serif',
+    width: 'calc(100% - 280px)',
+    height: '100%',
+    padding: '10px 40px',
+  },
+};
 
 const codeStylePath = path.join(
   config.baseDir,
   '/node_modules/highlight.js/styles/'
 );
 
-class Page extends DOMComponent<'div'> {
-  directory: Directory;
+class Page {
+  title: string;
+  content: string;
+  children: DOMComponent<any>[] = [];
+  dom = new JSDOM(`<!DOCTYPE html><html><body></body></html>`, {
+    runScripts: 'dangerously',
+    resources: 'usable',
+    url: 'http://localhost',
+  });
 
-  constructor(directory: Directory) {
-    super('div');
-    this.className = 'page';
-    this.directory = directory;
+  window = this.dom.window;
+  document = this.window.document;
+  body = this.document.body;
+  head = this.document.head;
 
-    const pagePath = path.join(config.baseDir, directory.path, directory.page);
-    const value = fs.readFileSync(pagePath, 'utf8');
-    const md = marked(value);
+  globalScripts = this.createDocumentFragment();
+  globalStyles = this.createElement('style');
 
-    this.element.innerHTML = md;
-    this.addExternalCSS(path.join(codeStylePath, config.codeTheme + '.css'));
-    this.element.querySelectorAll('pre code').forEach((block) => {
+  constructor(info: PageInfo) {
+    this.title = info.title;
+    this.content = info.content;
+    this.addGlobalStyles(globalStyles);
+    this.head.appendChild(this.globalStyles);
+
+    const markupBody = new DOMComponent('div');
+    markupBody.className = 'markdown-body';
+    markupBody.element.innerHTML = marked(info.content);
+
+    this.addExternalGlobalCSS(
+      path.join(codeStylePath, config.codeTheme + '.css')
+    );
+
+    markupBody.element.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightElement(block as HTMLElement);
     });
+
+    this.appendChild(markupBody);
+  }
+
+  public addGlobalStyles = (code: CSS | string) => {
+    switch (typeof code) {
+      case 'string':
+        this.globalStyles.innerHTML += code;
+        break;
+      case 'object':
+        this.globalStyles.innerHTML += generateInlineCSS(code);
+        break;
+    }
+  };
+
+  public createDocumentFragment() {
+    return this.document.createDocumentFragment();
+  }
+
+  public createElement<T extends keyof HTMLElementTagNameMap>(
+    tag: T
+  ): HTMLElementTagNameMap[T] {
+    return this.document.createElement(tag) as HTMLElementTagNameMap[T];
+  }
+
+  public addExternalGlobalCSS = (path: string) => {
+    this.addGlobalStyles(fs.readFileSync(path, 'utf8'));
+  };
+
+  public addGlobalScript = (code: string) => {
+    const script = this.createElement('script');
+
+    script.innerHTML = `{${code}}`;
+    this.globalScripts.appendChild(script);
+  };
+
+  public appendChild = (child: DOMComponent<any>) => {
+    recursivelySetPage(this, child);
+    this.children.push(child);
+  };
+
+  public setSessionParam = (name: string, value: any) => {
+    this.dom?.window?.sessionStorage?.setItem(name, value);
+  };
+
+  public getSessionParam = (name: string): any => {
+    return this.dom?.window?.sessionStorage?.getItem(name);
+  };
+
+  public serialize() {
+    this.head.appendChild(this.globalStyles);
+
+    this.children
+      .map((child) => child.compile())
+      .forEach((child) => {
+        this.body.appendChild(child);
+      });
+
+    this.body.appendChild(this.globalScripts);
+    const file = this.dom.serialize();
+
+    fs.writeFileSync(path.join(config.outDir, this.title + '.html'), file);
   }
 }
 

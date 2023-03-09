@@ -1,11 +1,10 @@
 import { color, config } from '../../config';
 import DOMComponent from '../../types/dom-component';
-import SearchBar from '../../components/searchBar/search';
+import SearchBar from '../../components/searchBar';
 import Dropdown from '../../components/dropdown';
-import { Directory } from '../../types';
-import DOM from '../../dom';
+import { PageInfo, CSS } from '../../types';
 
-DOM.addGlobalStyle({
+const globalSidebarStyles: CSS = {
   '#sidebar-id': {
     position: 'fixed',
     overflow: 'auto',
@@ -15,7 +14,7 @@ DOM.addGlobalStyle({
     left: '0',
     padding: '0',
     margin: '0',
-    width: '300px',
+    width: '280px',
     height: '100vh',
     backgroundColor: color.primary,
     textAlign: 'center',
@@ -24,8 +23,9 @@ DOM.addGlobalStyle({
 
   '.sidebar-head': {
     backgroundColor: color.secondary,
-    width: '300px',
+    width: '100%',
     borderRight: `1px solid ${color.secondary}`,
+    paddingBottom: '10px',
   },
 
   '.sidebar-body': {
@@ -47,10 +47,6 @@ DOM.addGlobalStyle({
     borderTop: `1px solid ${color.border}`,
   },
 
-  '.sidebar-footer p': {
-    // borderBottom: `1px solid ${color.border}`,
-  },
-
   '.sidebar-footer a': {
     color: color.secondary,
     fontWeight: 'bold',
@@ -61,7 +57,7 @@ DOM.addGlobalStyle({
     padding: '15px 10px',
     margin: '0',
   },
-});
+};
 
 const generateFooter = (): DOMComponent<'div'> => {
   const footer = new DOMComponent('div');
@@ -72,7 +68,7 @@ const generateFooter = (): DOMComponent<'div'> => {
 
   const title = new DOMComponent('a');
   title.textContent = 'MarkGEN';
-  title.element.href = '';
+  title.element.href = './index.html';
 
   poweredBy.appendChild(title);
   footer.appendChild(poweredBy);
@@ -80,7 +76,7 @@ const generateFooter = (): DOMComponent<'div'> => {
 };
 
 class Sidebar extends DOMComponent<'div'> {
-  constructor(directory: Directory) {
+  constructor(pageInfo: PageInfo) {
     super('div');
 
     const title = new DOMComponent('h4');
@@ -102,18 +98,12 @@ class Sidebar extends DOMComponent<'div'> {
     this.appendChild(sidebarHead);
     this.appendChild(sidebarBody);
     this.appendChild(sidebarFooter);
+    this.addGlobalStyles(globalSidebarStyles);
 
-    directory.subDirectories.forEach((dir, index) => {
-      const dropdown = Dropdown.createDropdownFromDirectory(dir, 1);
-      if (index === directory.subDirectories.length - 1)
-        dropdown.className += ' dropdown-folder-container-last-child';
-
+    pageInfo.subPages.forEach((info) => {
+      const dropdown = Dropdown.createDropdownFromPage(info);
       sidebarBody.appendChild(dropdown);
     });
-
-    Dropdown.createDropdownFiles(directory.files, 0).forEach((file) =>
-      sidebarBody.appendChild(file)
-    );
   }
 }
 

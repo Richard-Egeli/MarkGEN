@@ -52,3 +52,10 @@ element.addScript(myFunc, {id: "my-div-element", value: "Hello, World!"})
 This will then replace the variable names with the literal string values when generating the static html pages.
 
 
+
+| Hello | I'm | Working | a   | table |
+| ----- | --- | ------- | --- | ----- |
+| 1     | 2   | 3       | 4   | 5     |
+| 1     | 2   | 1       | 1   | 2     |
+
+

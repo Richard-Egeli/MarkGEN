@@ -51,6 +51,12 @@ export const compileScripts = (path: string[]) => {
 };
 
 export const compileAssets = (path: string) => {
+  const assetPath = `${config.baseDir}/${config.outDir}/${config.assetDir}`;
+  if (!fs.existsSync(assetPath)) {
+    fs.mkdirSync(assetPath, { recursive: true });
+    console.log(`Created directory ${assetPath}`);
+  }
+
   fs.readdirSync(path, { withFileTypes: true }).forEach((dirent) => {
     if (dirent.isDirectory()) {
       if (dirent.name === config.assetDir) {
