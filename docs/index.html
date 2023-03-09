@@ -1,0 +1,151 @@
+<!DOCTYPE html><html><head><style>* {box-sizing:border-box;}.page {position:absolute;top:0;width:100%;height:100%;margin:0;font-family:sans-serif;padding:10px 40px;overflow:auto;}.hljs {white-space:pre;overflow-x:auto;}.markdown-body {position:absolute;right:0;top:0;font-family:sans-serif;width:calc(100% - 280px);height:100%;padding:10px 40px;}pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}.hljs{color:#abb2bf;background:#282c34}.hljs-comment,.hljs-quote{color:#5c6370;font-style:italic}.hljs-doctag,.hljs-formula,.hljs-keyword{color:#c678dd}.hljs-deletion,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-subst{color:#e06c75}.hljs-literal{color:#56b6c2}.hljs-addition,.hljs-attribute,.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#98c379}.hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-variable,.hljs-type,.hljs-variable{color:#d19a66}.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title{color:#61aeee}.hljs-built_in,.hljs-class .hljs-title,.hljs-title.class_{color:#e6c07b}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}.hljs-link{text-decoration:underline}#sidebar-id {position:fixed;overflow:auto;display:flex;flex-direction:column;top:0;left:0;padding:0;margin:0;width:280px;height:100vh;background-color:#eaeeed;text-align:center;font-family:sans-serif;}.sidebar-head {background-color:#2980b9;width:100%;border-right:1px solid #2980b9;padding-bottom:10px;}.sidebar-body {width:100%;height:100%;overflow-y:auto;overflow-x:hidden;padding:0;border-right:1px solid #ddd;padding-bottom:20px;}.sidebar-footer {position:relative;bottom:0;width:100%;text-align:center;background-color:#eaeeed;border-top:1px solid #ddd;}.sidebar-footer a {color:#2980b9;font-weight:bold;}#sidebar-title-button {text-decoration:none;display:block;width:90%;margin:0 auto;cursor:pointer;}#sidebar-title-button:hover {text-decoration:none;opacity:0.8;}#sidebar-title {color:#fff;padding:15px 10px;margin:0px;text-decoration:none;border:none;}.search-bar-input {position:block;box-sizing:border-box;padding:6px 16px;margin:8px auto;width:90%;border-radius:16px;border:1px solid #ddd;}.search-bar-input:focus {outline:none;}.dropdown-folder-container {display:flex;align-items:center;margin-top:8px;}.dropdown-folder-container-button {display:flex;align-items:center;color:#4c4957;width:100%;height:36px;border:none;text-align:left;padding:0px 8px;font-weight:bold;font-size:12px;text-decoration:none;background-color:#eaeeed;cursor:pointer;}.dropdown-folder-container-button:hover {background-color:#dadada;}.dropdown-folder-container-icon-chevron {transform:rotate(0deg);transition:transform 0.2s ease-in-out;color:#4c4957;}.dropdown-folder-container-icon-button {border-right:1px solid #ddd;display:flex;align-items:center;justify-content:center;color:#4c4957;height:36px;min-width:36px;padding:8px;border-top:none;border-left:none;border-bottom:none;background-color:#eaeeed;cursor:pointer;}.dropdown-folder-container-icon-button:hover {background-color:#dadada;}.dropdown-folder-container {display:flex;align-items:center;margin-top:8px;}.dropdown-folder-container-button {display:flex;align-items:center;color:#4c4957;width:100%;height:36px;border:none;text-align:left;padding:0px 8px;font-weight:bold;font-size:12px;text-decoration:none;background-color:#eaeeed;cursor:pointer;}.dropdown-folder-container-button:hover {background-color:#dadada;}.dropdown-folder-container-icon-chevron {transform:rotate(0deg);transition:transform 0.2s ease-in-out;color:#4c4957;}.dropdown-folder-container-icon-button {border-right:1px solid #ddd;display:flex;align-items:center;justify-content:center;color:#4c4957;height:36px;min-width:36px;padding:8px;border-top:none;border-left:none;border-bottom:none;background-color:#eaeeed;cursor:pointer;}.dropdown-folder-container-icon-button:hover {background-color:#dadada;}</style></head><body><div class="markdown-body"><h1 id="inline-functions-in-markgen">Inline Functions In MarkGEN</h1>
+<h2 id="description">Description</h2>
+<h3 id="basics">Basics</h3>
+<p>Inlining functions simply means inserting them into the HTML when building the page rather than using a separate .js file to contain the functions.</p>
+<p>MarkGEN provides a simple way to generate these functions:</p>
+<pre><code class="language-javascript hljs"><span class="hljs-keyword">const</span> myFunc = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'Hello world'</span>);
+};
+</code></pre>
+<p>Here's the simplest form of a function that can be inlined.</p>
+<p>To do so you can call:</p>
+<pre><code class="language-javascript hljs"><span class="hljs-comment">// You can use any type of DOMElement</span>
+<span class="hljs-keyword">const</span> element = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DOMElement</span>(<span class="hljs-string">'div'</span>);
+element.<span class="hljs-title function_">addScript</span>(myFunc);
+</code></pre>
+<p>That's it! now the next time you open the html it should trigger the script!</p>
+<h3 id="parameters">Parameters</h3>
+<p>Inlining functions also support parameters, so take for example this function:</p>
+<pre><code class="language-javascript hljs"><span class="hljs-keyword">const</span> <span class="hljs-title function_">myFunc</span> = (<span class="hljs-params">id, value</span>) =&gt; {
+  <span class="hljs-keyword">const</span> el = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(id);
+  el.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">'click'</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">'Value: '</span> + value);
+  });
+};
+</code></pre>
+<p>Here we run into an issue where we want to insert a few parameters, but we don't have access to the parameters in the parenthesis.</p>
+<p>So I solved this issue by issuing a replace command on the string, so you've got to insert a object with <code>{ (key = var name), (value = var value) }</code> in the <code>addScript</code> function as follows:</p>
+<pre><code class="language-javascript hljs">element.<span class="hljs-title function_">addScript</span>(myFunc, {
+  <span class="hljs-attr">id</span>: <span class="hljs-string">'my-div-element'</span>,
+  <span class="hljs-attr">value</span>: <span class="hljs-string">'Hello, World!'</span>,
+});
+</code></pre>
+<p>This will then replace the variable names with the literal string values when generating the static html pages.</p>
+</div><div id="sidebar-id"><div class="sidebar-head"><a id="sidebar-title-button" href="./index.html"><h4 id="sidebar-title">Example Documentation</h4></a><input class="search-bar-input" id="search-bar-input" type="text" placeholder="Search"></div><div class="sidebar-body"><div class="dropdown" id="src-components"><div class="dropdown-folder-container" id="src-components"><button class="dropdown-folder-container-icon-button" style="padding-left: 8px;" id="src-components-icon-button"><img class="dropdown-folder-container-icon-chevron" id="src-components-icon-chevron" src="assets/chevron.svg"></button><a class="dropdown-folder-container-button" id="src-components-button"><span class="dropdown-folder-container-button-text">COMPONENTS</span></a></div><div id="src-components-container" style="display: none;"><div></div><div class="dropdown" id="src-components-dropdown"><div class="dropdown-folder-container" id="src-components-dropdown"><button class="dropdown-folder-container-icon-button" style="padding-left: 18px;" id="src-components-dropdown-icon-button"><img class="dropdown-folder-container-icon-chevron" id="src-components-dropdown-icon-chevron" src="assets/chevron.svg"></button><a class="dropdown-folder-container-button" id="src-components-dropdown-button"><span class="dropdown-folder-container-button-text">DROPDOWN</span></a></div><div id="src-components-dropdown-container" style="display: none;"><div></div></div></div></div></div></div><div class="sidebar-footer"><p>Built with <a href="https://github.com/Richard-Egeli/MarkGEN">MarkGEN</a></p></div></div><script>{const element = document.getElementById('search-bar-input');
+
+if (element) {
+  element.addEventListener('change', (event) => {
+    console.log(event.target.value);
+  });
+}
+}</script><script>{const button = document.getElementById("src-components-button");
+    const isOpen = sessionStorage.getItem("src-components-button") === 'true';
+    // keep open on refresh
+    if (isOpen) {
+        const chevron = document.getElementById("src-components-icon-chevron");
+        const container = document.getElementById("src-components-container");
+        if (chevron && container) {
+            chevron.style.transform = 'rotate(90deg)';
+            container.style.display = 'block';
+        }
+    }
+    if (button) {
+        button.addEventListener('click', () => {
+            const chevron = document.getElementById("src-components-icon-chevron");
+            const container = document.getElementById("src-components-container");
+            const oldRoute = window.location.href.split('/').pop();
+            if (chevron && container) {
+                if (chevron.style.transform === 'rotate(90deg)') {
+                    sessionStorage.setItem("src-components-button", 'false');
+                    chevron.style.transform = 'rotate(0deg)';
+                    container.style.display = 'none';
+                    if (oldRoute !== "components.html") {
+                        setTimeout(() => {
+                            window.location.href = "components.html";
+                        }, 200);
+                    }
+                    return;
+                }
+                sessionStorage.setItem("src-components-button", 'true');
+                chevron.style.transform = 'rotate(90deg)';
+                container.style.display = 'block';
+                if (oldRoute !== "components.html") {
+                    setTimeout(() => {
+                        window.location.href = "components.html";
+                    }, 200);
+                }
+            }
+        });
+    }}</script><script>{const button = document.getElementById("src-components-icon-button");
+    if (button) {
+        button.addEventListener('click', () => {
+            const chevron = document.getElementById("src-components-icon-chevron");
+            const container = document.getElementById("src-components-container");
+            if (chevron && container) {
+                if (chevron.style.transform === 'rotate(90deg)') {
+                    sessionStorage.setItem("src-components-icon-button", 'false');
+                    chevron.style.transform = 'rotate(0deg)';
+                    container.style.display = 'none';
+                    return;
+                }
+                sessionStorage.setItem("src-components-icon-button", 'true');
+                chevron.style.transform = 'rotate(90deg)';
+                container.style.display = 'block';
+            }
+        });
+    }}</script><script>{const button = document.getElementById("src-components-dropdown-button");
+    const isOpen = sessionStorage.getItem("src-components-dropdown-button") === 'true';
+    // keep open on refresh
+    if (isOpen) {
+        const chevron = document.getElementById("src-components-dropdown-icon-chevron");
+        const container = document.getElementById("src-components-dropdown-container");
+        if (chevron && container) {
+            chevron.style.transform = 'rotate(90deg)';
+            container.style.display = 'block';
+        }
+    }
+    if (button) {
+        button.addEventListener('click', () => {
+            const chevron = document.getElementById("src-components-dropdown-icon-chevron");
+            const container = document.getElementById("src-components-dropdown-container");
+            const oldRoute = window.location.href.split('/').pop();
+            if (chevron && container) {
+                if (chevron.style.transform === 'rotate(90deg)') {
+                    sessionStorage.setItem("src-components-dropdown-button", 'false');
+                    chevron.style.transform = 'rotate(0deg)';
+                    container.style.display = 'none';
+                    if (oldRoute !== "dropdown.html") {
+                        setTimeout(() => {
+                            window.location.href = "dropdown.html";
+                        }, 200);
+                    }
+                    return;
+                }
+                sessionStorage.setItem("src-components-dropdown-button", 'true');
+                chevron.style.transform = 'rotate(90deg)';
+                container.style.display = 'block';
+                if (oldRoute !== "dropdown.html") {
+                    setTimeout(() => {
+                        window.location.href = "dropdown.html";
+                    }, 200);
+                }
+            }
+        });
+    }}</script><script>{const button = document.getElementById("src-components-dropdown-icon-button");
+    if (button) {
+        button.addEventListener('click', () => {
+            const chevron = document.getElementById("src-components-dropdown-icon-chevron");
+            const container = document.getElementById("src-components-dropdown-container");
+            if (chevron && container) {
+                if (chevron.style.transform === 'rotate(90deg)') {
+                    sessionStorage.setItem("src-components-dropdown-icon-button", 'false');
+                    chevron.style.transform = 'rotate(0deg)';
+                    container.style.display = 'none';
+                    return;
+                }
+                sessionStorage.setItem("src-components-dropdown-icon-button", 'true');
+                chevron.style.transform = 'rotate(90deg)';
+                container.style.display = 'block';
+            }
+        });
+    }}</script></body></html>

@@ -1,6 +1,6 @@
 {
     "project": "Example Documentation",
-    "outDir": "build",
+    "outDir": "docs",
     "srcDir": "src",
     "baseDir": "",
     "assetDir": "assets",
