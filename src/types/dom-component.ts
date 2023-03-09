@@ -1,8 +1,8 @@
 import { CSS } from '.';
-import DOM from '../dom';
 import { generateInlineFunction } from '../utils/generator';
 import fs from 'fs';
 import Page from '../containers/page';
+import DOM from '../dom';
 
 /**
  * A DOM component helper class that allows for easy creation of HTML elements
@@ -12,10 +12,11 @@ class DOMComponent<T extends keyof HTMLElementTagNameMap> {
   public page: Page | null = null;
   public parent: DOMComponent<any> | null = null;
   public readonly element: HTMLElementTagNameMap[T];
-  public children: DOMComponent<any>[] = [];
+  public childrenAppend: DOMComponent<any>[] = [];
+  public childrenPrepend: DOMComponent<any>[] = [];
   private inlineStyles: string[] = [];
   private globalStyles: CSS = {};
-
+  private externalGlobalStyles: string[] = [];
   private scripts: string[] = [];
 
   makeID(): string {
@@ -27,7 +28,7 @@ class DOMComponent<T extends keyof HTMLElementTagNameMap> {
   }
 
   constructor(tagName: T) {
-    this.element = DOM.document.createElement(tagName);
+    this.element = DOM.createElement(tagName);
   }
 
   get id(): string {
@@ -77,31 +78,40 @@ class DOMComponent<T extends keyof HTMLElementTagNameMap> {
 
   public addExternalScript(path: string): void {
     const script = fs.readFileSync(path, 'utf8');
-
-    if (script) {
-      this.scripts.push(script);
-    }
+    this.scripts.push(script);
   }
 
   public addExternalCSS(path: string): void {
     const css = fs.readFileSync(path, 'utf8');
-
     if (css) {
-      DOM.addGlobalStyle(css);
+      this.externalGlobalStyles.push(css);
     }
   }
 
   public compile(): HTMLElementTagNameMap[T] {
     this.parent && this.parent.element.appendChild(this.element);
-    this.scripts.forEach(this.page.addGlobalScript);
-    this.page.addGlobalStyles(this.globalStyles);
-    this.children.forEach((c) => c.compile());
+
+    if (this.page) {
+      this.scripts.forEach((s) => this.page.addGlobalScript(s));
+      this.page.addGlobalStyles(this.globalStyles);
+      this.externalGlobalStyles.forEach(this.page.addExternalGlobalCSS);
+    }
+
+    this.childrenPrepend.forEach((c) => c.compile());
+    this.childrenAppend.forEach((c) => c.compile());
     return this.element;
+  }
+
+  public prependChild(child: DOMComponent<any>): void {
+    child.parent = this;
+    child.page = this.page;
+    this.childrenPrepend.push(child);
   }
 
   public appendChild(child: DOMComponent<any>): void {
     child.parent = this;
-    this.children.push(child);
+    child.page = this.page;
+    this.childrenAppend.push(child);
   }
 }
 

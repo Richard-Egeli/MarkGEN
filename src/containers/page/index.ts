@@ -1,13 +1,17 @@
 import DOMComponent from '../../types/dom-component';
-import { marked } from 'marked';
+import DOM from '../../dom';
+
+import fs from 'fs';
+import path from 'path';
 import hljs from 'highlight.js';
 import config from '../../config';
-import path = require('path');
+
+import { JSDOM } from 'jsdom';
+import { marked } from 'marked';
 import { PageInfo, CSS } from '../../types';
 import { generateInlineCSS } from '../../utils/generator';
-import { JSDOM } from 'jsdom';
-import fs from 'fs';
 import { recursivelySetPage } from './helper';
+import Sidebar from '../sidebar';
 
 const globalStyles: CSS = {
   '*': {
@@ -47,8 +51,10 @@ const codeStylePath = path.join(
 );
 
 class Page {
+  path: string;
   title: string;
-  content: string;
+  sidebar: Sidebar;
+  content: DOMComponent<'div'>;
   children: DOMComponent<any>[] = [];
   dom = new JSDOM(`<!DOCTYPE html><html><body></body></html>`, {
     runScripts: 'dangerously',
@@ -61,28 +67,27 @@ class Page {
   body = this.document.body;
   head = this.document.head;
 
-  globalScripts = this.createDocumentFragment();
-  globalStyles = this.createElement('style');
+  globalScripts = DOM.createDocumentFragment();
+  globalStyles = DOM.createElement('style');
 
-  constructor(info: PageInfo) {
+  constructor(info: PageInfo, sidebar: Sidebar) {
+    this.path = info.path;
+    this.sidebar = sidebar;
     this.title = info.title;
-    this.content = info.content;
     this.addGlobalStyles(globalStyles);
     this.head.appendChild(this.globalStyles);
-
-    const markupBody = new DOMComponent('div');
-    markupBody.className = 'markdown-body';
-    markupBody.element.innerHTML = marked(info.content);
-
     this.addExternalGlobalCSS(
       path.join(codeStylePath, config.codeTheme + '.css')
     );
 
-    markupBody.element.querySelectorAll('pre code').forEach((block) => {
+    this.content = new DOMComponent('div');
+    this.content.className = 'markdown-body';
+    this.content.element.innerHTML = marked(info.content);
+    this.content.element.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightElement(block as HTMLElement);
     });
 
-    this.appendChild(markupBody);
+    this.appendChild(this.content);
   }
 
   public addGlobalStyles = (code: CSS | string) => {
@@ -96,22 +101,12 @@ class Page {
     }
   };
 
-  public createDocumentFragment() {
-    return this.document.createDocumentFragment();
-  }
-
-  public createElement<T extends keyof HTMLElementTagNameMap>(
-    tag: T
-  ): HTMLElementTagNameMap[T] {
-    return this.document.createElement(tag) as HTMLElementTagNameMap[T];
-  }
-
   public addExternalGlobalCSS = (path: string) => {
     this.addGlobalStyles(fs.readFileSync(path, 'utf8'));
   };
 
   public addGlobalScript = (code: string) => {
-    const script = this.createElement('script');
+    const script = DOM.createElement('script');
 
     script.innerHTML = `{${code}}`;
     this.globalScripts.appendChild(script);
@@ -119,6 +114,7 @@ class Page {
 
   public appendChild = (child: DOMComponent<any>) => {
     recursivelySetPage(this, child);
+    this.body.appendChild(child.compile());
     this.children.push(child);
   };
 
@@ -131,17 +127,14 @@ class Page {
   };
 
   public serialize() {
+    // Add styles to head
     this.head.appendChild(this.globalStyles);
 
-    this.children
-      .map((child) => child.compile())
-      .forEach((child) => {
-        this.body.appendChild(child);
-      });
-
+    // Add scripts to body
     this.body.appendChild(this.globalScripts);
-    const file = this.dom.serialize();
 
+    // Serialize
+    const file = this.dom.serialize();
     fs.writeFileSync(path.join(config.outDir, this.title + '.html'), file);
   }
 }

@@ -56,7 +56,7 @@ const globalStyles: CSS = {
   },
 };
 
-class DropdownFolder extends DOMComponent<'div'> {
+class DropdownLink extends DOMComponent<'div'> {
   public iconButton: DOMComponent<'button'>;
   public button: DOMComponent<'a'>;
   public icon: DOMComponent<'img'>;
@@ -96,4 +96,4 @@ class DropdownFolder extends DOMComponent<'div'> {
   }
 }
 
-export default DropdownFolder;
+export default DropdownLink;

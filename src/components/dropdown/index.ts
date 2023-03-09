@@ -1,11 +1,9 @@
-export * from './dropdown-file';
-export * from './dropdown-folder';
+export * from './dropdown-nav';
+export * from './dropdown-links';
 
+import { PageInfo } from '../../types';
 import DOMComponent from '../../types/dom-component';
-import config from '../../config';
-import { Directory, PageInfo } from '../../types';
-import DropdownFile from './dropdown-file';
-import DropdownFolder from './dropdown-folder';
+import DropdownLink from './dropdown-links';
 
 const menuIconFunc = (buttonId, chevronId, containerId) => {
   const button = document.getElementById(buttonId);
@@ -55,11 +53,11 @@ const menuFunctionality = (buttonId, chevronId, containerId, route) => {
 
       if (chevron && container) {
         if (chevron.style.transform === 'rotate(90deg)') {
-          sessionStorage.setItem(buttonId, 'false');
-          chevron.style.transform = 'rotate(0deg)';
-          container.style.display = 'none';
-
-          if (oldRoute !== route) {
+          if (oldRoute === route) {
+            sessionStorage.setItem(buttonId, 'false');
+            chevron.style.transform = 'rotate(0deg)';
+            container.style.display = 'none';
+          } else {
             setTimeout(() => {
               window.location.href = route;
             }, 200);
@@ -71,6 +69,7 @@ const menuFunctionality = (buttonId, chevronId, containerId, route) => {
         sessionStorage.setItem(buttonId, 'true');
         chevron.style.transform = 'rotate(90deg)';
         container.style.display = 'block';
+
         if (oldRoute !== route) {
           setTimeout(() => {
             window.location.href = route;
@@ -93,9 +92,11 @@ class Dropdown extends DOMComponent<'div'> {
 
     this.folders.id = this.id + '-container';
     this.folders.element.style.display = 'none';
-    const folder = new DropdownFolder(id, depth);
-    this.appendChild(folder);
+    this.folders.element.style.textAlign = 'left';
 
+    const folder = new DropdownLink(id, depth);
+
+    this.appendChild(folder);
     this.appendChild(this.folders);
     this.folders.appendChild(this.files);
 
@@ -113,24 +114,6 @@ class Dropdown extends DOMComponent<'div'> {
     });
   }
 
-  public static isDirectoryEmpty(directory: Directory): boolean {
-    return (
-      config.compilationOptions &&
-      directory.subDirectories.length === 0 &&
-      directory.files.length === 0
-    );
-  }
-
-  public static createDropdownFiles(
-    files: string[],
-    depth: number
-  ): DropdownFile[] {
-    return files.map((file) => {
-      const dropdownFile = new DropdownFile(file, depth);
-      return dropdownFile;
-    });
-  }
-
   public static createDropdownFromPage(page: PageInfo, depth: number = 0) {
     const dropdown = new Dropdown(page.path.split('/').join('-'), depth);
 
@@ -142,25 +125,8 @@ class Dropdown extends DOMComponent<'div'> {
     return dropdown;
   }
 
-  public static createDropdownFromDirectory(directory: Directory, depth = 0) {
-    const dropdown = new Dropdown(directory.path.split('/').join('-'), depth);
-
-    directory.subDirectories.forEach((dir) => {
-      if (Dropdown.isDirectoryEmpty(dir)) return;
-
-      const d = Dropdown.createDropdownFromDirectory(dir, depth + 1);
-      dropdown.folders.appendChild(d);
-    });
-
-    this.createDropdownFiles(directory.files, depth).forEach((file) => {
-      dropdown.files.appendChild(file);
-    });
-
-    return dropdown;
-  }
-
   set textContent(text: string) {
-    const span = this.children[0].children[1];
+    const span = this.childrenAppend[0].childrenAppend[1];
     if (span) {
       span.textContent = text.toUpperCase();
     }

@@ -3,6 +3,7 @@ import DOMComponent from '../../types/dom-component';
 import SearchBar from '../../components/searchBar';
 import Dropdown from '../../components/dropdown';
 import { PageInfo, CSS } from '../../types';
+import DropdownNav from '../../components/dropdown/dropdown-nav';
 
 const globalSidebarStyles: CSS = {
   '#sidebar-id': {
@@ -29,6 +30,9 @@ const globalSidebarStyles: CSS = {
   },
 
   '.sidebar-body': {
+    display: 'flex',
+    flexDirection: 'column',
+    textAlign: 'left',
     width: '100%',
     height: '100%',
     overflowY: 'auto',
@@ -72,6 +76,12 @@ const globalSidebarStyles: CSS = {
     textDecoration: 'none',
     border: 'none',
   },
+
+  '.sidebar-link': {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
 };
 
 const generateFooter = (): DOMComponent<'div'> => {
@@ -91,18 +101,23 @@ const generateFooter = (): DOMComponent<'div'> => {
 };
 
 class Sidebar extends DOMComponent<'div'> {
+  private sidebarHead: DOMComponent<'div'>;
+  private sidebarBody: DOMComponent<'div'>;
+  private sidebarFooter: DOMComponent<'div'>;
+
   constructor(pageInfo: PageInfo) {
     super('div');
 
     const titleButton = new DOMComponent('a');
     const title = new DOMComponent('h4');
     const searchBar = new SearchBar();
-    const sidebarHead = new DOMComponent('div');
-    const sidebarBody = new DOMComponent('div');
-    const sidebarFooter = generateFooter();
 
-    sidebarHead.className = 'sidebar-head';
-    sidebarBody.className = 'sidebar-body';
+    this.sidebarHead = new DOMComponent('div');
+    this.sidebarBody = new DOMComponent('div');
+    this.sidebarFooter = generateFooter();
+
+    this.sidebarHead.className = 'sidebar-head';
+    this.sidebarBody.className = 'sidebar-body';
 
     this.id = 'sidebar-id';
     title.id = 'sidebar-title';
@@ -111,18 +126,33 @@ class Sidebar extends DOMComponent<'div'> {
     titleButton.element.href = './index.html';
 
     titleButton.appendChild(title);
-    sidebarHead.appendChild(titleButton);
-    sidebarHead.appendChild(searchBar);
+    this.sidebarHead.appendChild(titleButton);
+    this.sidebarHead.appendChild(searchBar);
 
-    this.appendChild(sidebarHead);
-    this.appendChild(sidebarBody);
-    this.appendChild(sidebarFooter);
+    this.appendChild(this.sidebarHead);
+    this.appendChild(this.sidebarBody);
+    this.appendChild(this.sidebarFooter);
     this.addGlobalStyles(globalSidebarStyles);
 
     pageInfo.subPages.forEach((info) => {
       const dropdown = Dropdown.createDropdownFromPage(info);
-      sidebarBody.appendChild(dropdown);
+      this.sidebarBody.appendChild(dropdown);
     });
+  }
+
+  override compile() {
+    [
+      ...this.page.content.element.querySelectorAll('h1, h2, h3, h4, h5, h6'),
+    ].forEach((element, index, arr) => {
+      const nav = new DropdownNav(element);
+      this.sidebarBody.prependChild(nav);
+
+      if (index === arr.length - 1) {
+        nav.className += ' dropdown-nav-last';
+      }
+    });
+
+    return super.compile();
   }
 }
 

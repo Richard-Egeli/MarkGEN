@@ -3,6 +3,32 @@ import config from '../config';
 import fs from 'fs';
 import path = require('path');
 
+export const compileAssets = (path = `${config.baseDir}/${config.srcDir}`) => {
+  const assetPath = `${config.baseDir}/${config.outDir}/${config.assetDir}`;
+  if (!fs.existsSync(assetPath)) {
+    fs.mkdirSync(assetPath, { recursive: true });
+  }
+
+  fs.readdirSync(path, { withFileTypes: true }).forEach((dirent) => {
+    if (dirent.isDirectory()) {
+      if (dirent.name === config.assetDir) {
+        fs.readdirSync(`${path}/${dirent.name}`, {
+          withFileTypes: true,
+        }).forEach((file) => {
+          if (file.isFile()) {
+            fs.copyFileSync(
+              `${path}/${dirent.name}/${file.name}`,
+              `${config.baseDir}/${config.outDir}/${config.assetDir}/${file.name}`
+            );
+          }
+        });
+      } else {
+        compileAssets(`${path}/${dirent.name}`);
+      }
+    }
+  });
+};
+
 export const getDirectoriesNew = (
   path: string,
   extensions: string[]

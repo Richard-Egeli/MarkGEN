@@ -1,5 +1,4 @@
 import { color } from '../../config';
-import DOM from '../../dom';
 import DOMComponent from '../../types/dom-component';
 
 const globalStyles = {
