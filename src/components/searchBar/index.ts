@@ -7,7 +7,7 @@ const globalStyles = {
     position: 'block',
     boxSizing: 'border-box',
     padding: '6px 16px',
-    margin: '0px auto 8px auto',
+    margin: '8px auto',
     width: '90%',
     borderRadius: '16px',
     border: `1px solid ${color.border}`,

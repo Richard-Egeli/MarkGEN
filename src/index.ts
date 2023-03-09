@@ -18,7 +18,6 @@ const pageData = getPageInfo(config.srcDir);
 const createPages = (info: PageInfo, depth: number = 0) => {
   const sidebar = new Sidebar(pageData);
   const page = new Page(info);
-  console.log(info.title);
   page.appendChild(sidebar);
   page.serialize();
 

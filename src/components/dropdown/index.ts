@@ -7,11 +7,34 @@ import { Directory, PageInfo } from '../../types';
 import DropdownFile from './dropdown-file';
 import DropdownFolder from './dropdown-folder';
 
+const menuIconFunc = (buttonId, chevronId, containerId) => {
+  const button = document.getElementById(buttonId);
+
+  if (button) {
+    button.addEventListener('click', () => {
+      const chevron = document.getElementById(chevronId);
+      const container = document.getElementById(containerId);
+
+      if (chevron && container) {
+        if (chevron.style.transform === 'rotate(90deg)') {
+          sessionStorage.setItem(buttonId, 'false');
+          chevron.style.transform = 'rotate(0deg)';
+          container.style.display = 'none';
+
+          return;
+        }
+
+        sessionStorage.setItem(buttonId, 'true');
+        chevron.style.transform = 'rotate(90deg)';
+        container.style.display = 'block';
+      }
+    });
+  }
+};
+
 const menuFunctionality = (buttonId, chevronId, containerId, route) => {
   const button = document.getElementById(buttonId);
   const isOpen = sessionStorage.getItem(buttonId) === 'true';
-
-  console.log(buttonId);
 
   // keep open on refresh
   if (isOpen) {
@@ -81,6 +104,12 @@ class Dropdown extends DOMComponent<'div'> {
       chevronId: folder.icon.id,
       containerId: this.folders.id,
       route: `${id.split('-').pop()}.html`,
+    });
+
+    this.addInlineScript(menuIconFunc, {
+      buttonId: folder.iconButton.id,
+      chevronId: folder.icon.id,
+      containerId: this.folders.id,
     });
   }
 

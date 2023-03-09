@@ -73,10 +73,10 @@ class DropdownFolder extends DOMComponent<'div'> {
     this.text = new DOMComponent('span');
     this.button = new DOMComponent('a');
     this.iconButton = new DOMComponent('button');
-    this.iconButton.id = 'test-button';
 
     this.iconButton.className = this.className + '-icon-button';
     this.iconButton.element.style.paddingLeft = `${depth * 10 + 8}px`;
+    this.iconButton.id = this.id + '-icon-button';
 
     this.button.className = this.className + '-button';
     this.button.id = this.id + '-button';

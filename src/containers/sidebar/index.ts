@@ -52,10 +52,25 @@ const globalSidebarStyles: CSS = {
     fontWeight: 'bold',
   },
 
+  '#sidebar-title-button': {
+    textDecoration: 'none',
+    display: 'block',
+    width: '90%',
+    margin: '0 auto',
+    cursor: 'pointer',
+  },
+
+  '#sidebar-title-button:hover': {
+    textDecoration: 'none',
+    opacity: '0.8',
+  },
+
   '#sidebar-title': {
     color: color.title,
     padding: '15px 10px',
-    margin: '0',
+    margin: '0px',
+    textDecoration: 'none',
+    border: 'none',
   },
 };
 
@@ -63,15 +78,15 @@ const generateFooter = (): DOMComponent<'div'> => {
   const footer = new DOMComponent('div');
   footer.className = 'sidebar-footer';
 
-  const poweredBy = new DOMComponent('p');
-  poweredBy.textContent = 'Built with ';
+  const builtWith = new DOMComponent('p');
+  builtWith.textContent = 'Built with ';
 
   const title = new DOMComponent('a');
   title.textContent = 'MarkGEN';
-  title.element.href = './index.html';
+  title.element.href = 'https://github.com/Richard-Egeli/MarkGEN';
 
-  poweredBy.appendChild(title);
-  footer.appendChild(poweredBy);
+  builtWith.appendChild(title);
+  footer.appendChild(builtWith);
   return footer;
 };
 
@@ -79,6 +94,7 @@ class Sidebar extends DOMComponent<'div'> {
   constructor(pageInfo: PageInfo) {
     super('div');
 
+    const titleButton = new DOMComponent('a');
     const title = new DOMComponent('h4');
     const searchBar = new SearchBar();
     const sidebarHead = new DOMComponent('div');
@@ -91,8 +107,11 @@ class Sidebar extends DOMComponent<'div'> {
     this.id = 'sidebar-id';
     title.id = 'sidebar-title';
     title.textContent = config.project;
+    titleButton.id = 'sidebar-title-button';
+    titleButton.element.href = './index.html';
 
-    sidebarHead.appendChild(title);
+    titleButton.appendChild(title);
+    sidebarHead.appendChild(titleButton);
     sidebarHead.appendChild(searchBar);
 
     this.appendChild(sidebarHead);
