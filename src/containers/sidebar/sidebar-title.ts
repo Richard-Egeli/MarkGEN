@@ -30,7 +30,7 @@ export class SidebarTitle extends DOMComponent<'a'> {
   constructor() {
     super('a');
 
-    const title = new DOMComponent('h4');
+    const title: DOMComponent<'h4'> = this.addComponent('h4');
 
     this.id = 'sidebar-title-button';
     this.element.href = './index.html';
@@ -39,6 +39,5 @@ export class SidebarTitle extends DOMComponent<'a'> {
     title.textContent = config.project;
 
     this.addGlobalStyles(globalStyles);
-    this.appendChild(title);
   }
 }

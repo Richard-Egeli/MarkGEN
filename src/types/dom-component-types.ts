@@ -4,8 +4,12 @@ export type ComponentType =
   | DOMComponent<keyof HTMLElementTagNameMap>
   | keyof HTMLElementTagNameMap;
 
+export type ComponentGenericType<T> = {
+  new (...args: any[]): T;
+};
+
 export type ComponentConstructorType =
-  | {
-      new (...args: any[]): any;
-    }
+  | ComponentGenericType<DOMComponent<keyof HTMLElementTagNameMap>>
   | keyof HTMLElementTagNameMap;
+
+export type InlineFunction = (...args: any[]) => void;

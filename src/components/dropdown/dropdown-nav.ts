@@ -38,22 +38,16 @@ class DropdownNav extends DOMComponent<'a'> {
 
     this.className = 'dropdown-nav';
     this.element.href = `#${element.id}`;
-
-    const icon = new DOMComponent('img');
-    icon.className = 'dropdown-nav-icon';
-    icon.element.src = 'assets/plus.svg';
-    this.appendChild(icon);
-
-    const text = new DOMComponent('p');
-    text.className = 'dropdown-nav-text';
-    text.element.innerHTML = element.innerHTML;
-    this.appendChild(text);
-  }
-
-  override compile() {
     this.addGlobalStyles(globalStyles);
 
-    return super.compile();
+    const icon: DOMComponent<'img'> = this.addComponent('img');
+    const text: DOMComponent<'p'> = this.addComponent('p');
+
+    icon.className = 'dropdown-nav-icon';
+    icon.element.src = 'assets/plus.svg';
+
+    text.className = 'dropdown-nav-text';
+    text.element.innerHTML = element.innerHTML;
   }
 }
 

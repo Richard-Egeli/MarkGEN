@@ -10,8 +10,8 @@ import { JSDOM } from 'jsdom';
 import { marked } from 'marked';
 import { PageInfo, CSS } from '../../types';
 import { generateInlineCSS } from '../../utils/generator';
-import { recursivelySetPage } from './helper';
 import Sidebar from '../sidebar';
+import { PageBody } from './page-body';
 
 const globalStyles: CSS = {
   '*': {
@@ -73,20 +73,21 @@ class Page {
     this.path = info.path;
     this.sidebar = sidebar;
     this.title = info.title;
+
+    this.content = new PageBody(info.content);
+    this.appendChild(this.content);
+    // this.content.className = 'markdown-body';
+    // this.content.element.innerHTML = marked(info.content);
+    // this.content.element.querySelectorAll('pre code').forEach((block) => {
+    //   hljs.highlightElement(block as HTMLElement);
+    // });
+
+    // this.appendChild(this.content);
     this.addGlobalStyles(globalStyles);
     this.head.appendChild(this.globalStyles);
     this.addExternalGlobalCSS(
       path.join(codeStylePath, config.codeTheme + '.css')
     );
-
-    this.content = new DOMComponent('div');
-    this.content.className = 'markdown-body';
-    this.content.element.innerHTML = marked(info.content);
-    this.content.element.querySelectorAll('pre code').forEach((block) => {
-      hljs.highlightElement(block as HTMLElement);
-    });
-
-    this.appendChild(this.content);
   }
 
   public addGlobalStyles = (code: CSS | string) => {
@@ -112,8 +113,8 @@ class Page {
   };
 
   public appendChild = (child: DOMComponent<any>) => {
-    recursivelySetPage(this, child);
-    this.body.appendChild(child.compile());
+    child.page = this;
+    this.body.appendChild(child.render());
   };
 
   public setSessionParam = (name: string, value: any) => {

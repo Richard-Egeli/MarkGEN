@@ -6,6 +6,7 @@ import { DOMFactory } from '.';
 import {
   ComponentConstructorType,
   ComponentType,
+  InlineFunction,
 } from '../types/dom-component-types';
 
 /**
@@ -13,11 +14,11 @@ import {
  * @template T The type of the element
  */
 export class DOMComponent<T extends keyof HTMLElementTagNameMap> {
-  public page: Page | null = null;
+  private currentPage: Page | null = null;
   public parent: DOMComponent<any> | null = null;
   public readonly element: HTMLElementTagNameMap[T];
-  public childrenAppend: DOMComponent<any>[] = [];
-  public childrenPrepend: DOMComponent<any>[] = [];
+  private childrenAppend: DOMComponent<any>[] = [];
+  private childrenPrepend: DOMComponent<any>[] = [];
   private inlineStyles: string[] = [];
   private globalStyles: CSS = {};
   private externalGlobalStyles: string[] = [];
@@ -41,6 +42,17 @@ export class DOMComponent<T extends keyof HTMLElementTagNameMap> {
 
   set id(id: string) {
     this.element.id = id;
+  }
+
+  get page(): Page | null {
+    return this.currentPage;
+  }
+
+  set page(page: Page | null) {
+    this.currentPage = page;
+    [...this.childrenAppend, ...this.childrenPrepend].forEach((child) => {
+      child.page = page;
+    });
   }
 
   get textContent(): string | null {
@@ -71,13 +83,8 @@ export class DOMComponent<T extends keyof HTMLElementTagNameMap> {
     Object.assign(this.globalStyles, styles);
   }
 
-  public addInlineScript(
-    func: (...args: any) => void,
-    params: Record<string, any> | null = null
-  ): void {
-    const code = generateInlineFunction(func, params);
-
-    this.scripts.push(code);
+  public addInlineScript(func: InlineFunction, ...args: any): void {
+    this.scripts.push(generateInlineFunction(func, ...args));
   }
 
   public addExternalScript(path: string): void {
@@ -92,7 +99,7 @@ export class DOMComponent<T extends keyof HTMLElementTagNameMap> {
     }
   }
 
-  public compile(): HTMLElementTagNameMap[T] {
+  public render(): HTMLElementTagNameMap[T] {
     this.parent && this.parent.element.appendChild(this.element);
 
     if (this.page) {
@@ -101,8 +108,8 @@ export class DOMComponent<T extends keyof HTMLElementTagNameMap> {
       this.externalGlobalStyles.forEach(this.page.addExternalGlobalCSS);
     }
 
-    this.childrenPrepend.forEach((c) => c.compile());
-    this.childrenAppend.forEach((c) => c.compile());
+    this.childrenPrepend.forEach((c) => c.render());
+    this.childrenAppend.forEach((c) => c.render());
     return this.element;
   }
 

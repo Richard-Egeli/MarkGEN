@@ -27,7 +27,7 @@ class SearchBar extends DOMComponent<'input'> {
     this.element.placeholder = 'Search';
 
     this.addGlobalStyles(globalStyles);
-    this.addExternalScript(__dirname + '/script.js');
+    // this.addExternalScript(__dirname + '/script.js');
   }
 
   get value(): string {
@@ -36,14 +36,6 @@ class SearchBar extends DOMComponent<'input'> {
 
   set value(value: string) {
     this.element.value = value;
-  }
-
-  get type(): string {
-    return this.element.type;
-  }
-
-  set type(type: string) {
-    this.element.type = type;
   }
 
   get placeholder(): string {

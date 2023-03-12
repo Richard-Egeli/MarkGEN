@@ -1,19 +1,30 @@
 import { CSS } from '../types';
 
-const convertFunctionToInline = (func: (...args: any) => void): string => {
-  const code = func.toString();
+const convertFunctionToInline = (code: string): string => {
   return code.substring(code.indexOf('{') + 1, code.lastIndexOf('}')).trim();
+};
+
+const extractFunctionParams = (code: string): string[] => {
+  return code
+    .substring(code.indexOf('(') + 1, code.indexOf(')'))
+    .split(',')
+    .map((param) => param.trim());
 };
 
 export const generateInlineFunction = (
   func: (...args: any) => void,
-  params: Record<string, any> | null
+  ...args: any
 ): string => {
-  return params
-    ? Object.entries(params).reduce<string>((acc, [key, value]) => {
-        return acc.replace(new RegExp(`${key}`, 'g'), `"${value}"`);
-      }, convertFunctionToInline(func))
-    : convertFunctionToInline(func);
+  const str = func.toString();
+  const params = extractFunctionParams(str);
+  const code = convertFunctionToInline(str);
+
+  return params.reduce<string>((acc, param, index) => {
+    return acc.replace(
+      new RegExp(`${param}`, 'g'),
+      args[index] ? `"${args[index]}"` : undefined
+    );
+  }, code);
 };
 
 export const generateInlineCSS = (styles: CSS): string => {

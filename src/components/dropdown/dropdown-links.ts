@@ -69,10 +69,11 @@ class DropdownLink extends DOMComponent<'div'> {
     this.id = path;
     this.addGlobalStyles(globalStyles);
 
-    this.icon = new DOMComponent('img');
-    this.text = new DOMComponent('span');
-    this.button = new DOMComponent('a');
-    this.iconButton = new DOMComponent('button');
+    this.iconButton = this.addComponent('button');
+    this.button = this.addComponent('a');
+
+    this.icon = this.iconButton.addComponent('img');
+    this.text = this.button.addComponent('span');
 
     this.iconButton.className = this.className + '-icon-button';
     this.iconButton.element.style.paddingLeft = `${depth * 10 + 8}px`;
@@ -87,12 +88,6 @@ class DropdownLink extends DOMComponent<'div'> {
 
     this.text.className = this.className + '-button-text';
     this.text.element.textContent = path.split('-').pop().toUpperCase();
-
-    this.iconButton.appendChild(this.icon);
-    this.button.appendChild(this.text);
-
-    this.appendChild(this.iconButton);
-    this.appendChild(this.button);
   }
 }
 
